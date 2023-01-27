@@ -11,3 +11,8 @@ export interface IUser {
   avatar: string;
   files: [{}];
 }
+
+export interface IAuthBody {
+  email: string;
+  password: string;
+}

@@ -1,0 +1,23 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+    letter-spacing: 0.8px;
+    color: #030303;
+    /*color: #313335;*/
+}
+.container {
+  margin: 0 auto;
+  padding: 0 5px;
+}
+.main__wrapper {
+  //background: #313335;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  min-height: 90vh;
+  overflow-x: auto;
+}
