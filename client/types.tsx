@@ -8,8 +8,8 @@ export interface IState {
 export interface IUser {
   email: string;
   password: string;
-  avatar: string;
-  files: [{}];
+  avatar?: string;
+  files?: [{}];
 }
 
 export interface IAuthBody {

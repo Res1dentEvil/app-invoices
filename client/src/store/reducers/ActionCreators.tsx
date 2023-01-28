@@ -14,11 +14,39 @@ export const registration = (body: IAuthBody) => async (dispatch: AppDispatch) =
         headers: { 'Content-Type': 'application/json' },
       })
       .then((response) => {
-        console.log('RESPONSE: ', response);
+        console.log('User was created');
       });
     dispatch(storeSlice.actions.registrationFetchingSuccess());
-  } catch (e: unknown) {
+  } catch (e) {
     const error = e as AxiosError;
-    dispatch(storeSlice.actions.authFetchingError(error.message));
+    dispatch(storeSlice.actions.authFetchingError(JSON.stringify(error.response?.data)));
+  }
+};
+
+export const login = (body: IAuthBody) => async (dispatch: AppDispatch) => {
+  console.log('logining...');
+  try {
+    dispatch(storeSlice.actions.fetching());
+    const response = await axios.post(`${baseURL}/api/auth/login`, body, {
+      headers: { 'Content-Type': 'application/json' },
+    });
+    dispatch(storeSlice.actions.authFetchingSuccess(response.data.user));
+    localStorage.setItem('token', response.data.token);
+  } catch (e) {
+    const error = e as AxiosError;
+    dispatch(storeSlice.actions.authFetchingError(JSON.stringify(error.response?.data)));
+  }
+};
+
+export const auth = () => async (dispatch: AppDispatch) => {
+  try {
+    const response = await axios.get(`${baseURL}/api/auth/auth`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+    });
+    dispatch(storeSlice.actions.authFetchingSuccess(response.data.user));
+    localStorage.setItem('token', response.data.token);
+  } catch (e) {
+    const error = e as AxiosError;
+    localStorage.removeItem('token');
   }
 };

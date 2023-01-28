@@ -19,9 +19,10 @@ export const storeSlice = createSlice({
     fetchingSuccess(state) {
       state.isLoading = false;
     },
-    authFetchingSuccess(state) {
+    authFetchingSuccess(state, action: PayloadAction<IUser>) {
       state.isAuth = true;
       state.isLoading = false;
+      state.currentUser = action.payload;
       state.error = '';
     },
     registrationFetchingSuccess(state) {
@@ -30,7 +31,17 @@ export const storeSlice = createSlice({
     },
     authFetchingError(state, action: PayloadAction<string>) {
       state.isLoading = false;
-      state.error = action.payload;
+      if (action.payload.length) {
+        state.error = JSON.parse(action.payload).message;
+      } else {
+        state.error = action.payload;
+      }
+    },
+    logout(state) {
+      state.isAuth = false;
+      state.currentUser = {} as IUser;
+      localStorage.removeItem('token');
+      console.log('logout...');
     },
   },
 });

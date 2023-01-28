@@ -1,12 +1,13 @@
-import React from 'react';
-import './Registration.scss';
+import React, { useEffect } from 'react';
+import './Authorization.scss';
 import { Input } from '../UI/Input/Input';
 import { registration } from '../../store/reducers/ActionCreators';
-import { useAppDispatch } from '../../hooks/redux';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { Formik } from 'formik';
 import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
 import LoginIcon from '@mui/icons-material/Login';
 import { Link } from 'react-router-dom';
+import { storeSlice } from '../../store/reducers/StoreSlice';
 
 interface IFormikErrors {
   email: string;
@@ -15,6 +16,14 @@ interface IFormikErrors {
 
 export const Registration = () => {
   const dispatch = useAppDispatch();
+  const { error } = useAppSelector((state) => state.storeReducer);
+  useEffect(
+    () => () => {
+      console.log('registration unmount');
+      dispatch(storeSlice.actions.authFetchingError(''));
+    },
+    []
+  );
 
   return (
     <div className="container">
@@ -29,7 +38,7 @@ export const Registration = () => {
           }
           if (!values.password) {
             errors.password = `wrong password`;
-          } else if (values.password.length < 3 || values.password.length > 3) {
+          } else if (values.password.length < 3 || values.password.length > 12) {
             errors.password = `wrong password`;
           }
           return errors;
@@ -40,7 +49,7 @@ export const Registration = () => {
         }}
       >
         {({ values, errors, touched, handleChange, handleSubmit, isSubmitting }) => (
-          <form onSubmit={handleSubmit} className="form__registration">
+          <form onSubmit={handleSubmit} className="form__authorization">
             <h2>
               <AppRegistrationIcon />
               Registration
@@ -69,6 +78,7 @@ export const Registration = () => {
                 {errors.password && touched.password && errors.password}
               </span>
             </div>
+            <span className={'submit__error'}>{error ? error : null}</span>
 
             <button className="btn btn_registration" type={'submit'}>
               Registration
