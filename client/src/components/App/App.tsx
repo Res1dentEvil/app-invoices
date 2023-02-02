@@ -4,15 +4,19 @@ import { Provider } from 'react-redux';
 import { setupStore } from '../../store/store';
 import { Header } from '../Header/Header';
 import { Registration } from '../Authorization/Registration';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useNavigate, Navigate } from 'react-router-dom';
 import { NotFound } from '../NotFound/NotFound';
 import { Login } from '../Authorization/Login';
-import { MainPage } from '../MainPage/MainPage';
-import { useAppDispatch } from '../../hooks/redux';
+import { TaskList } from '../TaskList/TaskList';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { auth } from '../../store/reducers/ActionCreators';
+import CreateTask from '../CreateTask/CreateTask';
 
 export const App = () => {
   const dispatch = useAppDispatch();
+  const { isAuth } = useAppSelector((state) => state.storeReducer);
+  const router = useNavigate();
+
   useEffect(() => {
     dispatch(auth());
   }, []);
@@ -21,12 +25,20 @@ export const App = () => {
     <>
       <Header />
       <main className="main__wrapper">
-        <Routes>
-          <Route path="/" element={<MainPage />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/registration" element={<Registration />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        {!isAuth ? (
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/registration" element={<Registration />} />
+            <Route path="*" element={<Navigate to="/login" replace />} />
+          </Routes>
+        ) : (
+          <Routes>
+            <Route path="/" element={<TaskList />} />
+            <Route path="/create" element={<CreateTask />} />
+            {/*<Route path="*" element={<NotFound />} />*/}
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        )}
       </main>
     </>
   );

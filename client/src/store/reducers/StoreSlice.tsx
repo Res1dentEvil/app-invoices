@@ -1,9 +1,10 @@
 import React from 'react';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IState, IUser } from '../../../types';
+import { useNavigate } from 'react-router-dom';
 
 const initialState: IState = {
-  isAuth: false,
+  isAuth: !!localStorage.getItem('token'),
   isLoading: false,
   currentUser: {} as IUser,
   error: '',

@@ -29,6 +29,11 @@ export const Header = () => {
             </Link>
           )}
           {isAuth && (
+            <Link className="navbar__link navbar__registration" to="/create">
+              Create
+            </Link>
+          )}
+          {isAuth && (
             <div
               className="navbar__link navbar__registration"
               onClick={() => dispatch(storeSlice.actions.logout())}

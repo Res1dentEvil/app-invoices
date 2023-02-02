@@ -1,5 +1,6 @@
 const Router = require("express");
 const User = require("../models/User");
+const Role = require("../models/Role");
 const bcrypt = require("bcryptjs");
 const config = require("config");
 const jwt = require("jsonwebtoken");
@@ -30,7 +31,12 @@ router.post(
           .json({ message: `User with this email already exists` });
       }
       const hashPassword = await bcrypt.hash(password, 7);
-      const user = new User({ email: email, password: hashPassword });
+      const userRole = await Role.findOne({ value: "USER" });
+      const user = new User({
+        email: email,
+        password: hashPassword,
+        roles: [userRole.value],
+      });
       await user.save();
       return res.json({ message: "User was created" });
     } catch (e) {
@@ -42,6 +48,10 @@ router.post(
 
 router.post("/login", async (req, res) => {
   try {
+    // const userRole = new Role();
+    // const adminRole = new Role({ value: "ADMIN" });
+    // await adminRole.save();
+    // await userRole.save();
     const { email, password } = req.body;
     const user = await User.findOne({ email });
     if (!user) {

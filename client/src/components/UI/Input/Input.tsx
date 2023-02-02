@@ -2,7 +2,7 @@ import React from 'react';
 import './Input.scss';
 
 interface inputProps {
-  defaultValue: string;
+  defaultValue?: string;
   onChange?: {
     (e: React.ChangeEvent): void;
     <T = string | React.ChangeEvent>(field: T): T extends React.ChangeEvent

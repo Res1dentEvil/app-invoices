@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { Formik } from 'formik';
 import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
 import LoginIcon from '@mui/icons-material/Login';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 interface IFormikErrors {
   email: string;
@@ -16,13 +16,6 @@ interface IFormikErrors {
 export const Login = () => {
   const dispatch = useAppDispatch();
   const { isAuth } = useAppSelector((state) => state.storeReducer);
-  const router = useNavigate();
-
-  useEffect(() => {
-    if (isAuth) {
-      router('/');
-    }
-  }, [isAuth]);
 
   return (
     <div className="container">
@@ -82,7 +75,7 @@ export const Login = () => {
               Login
             </button>
             <div>
-              <Link className="navbar__link auth-link login" to="/login">
+              <Link className="navbar__link auth-link login" to="/registration">
                 <AppRegistrationIcon />
                 Registration
               </Link>
