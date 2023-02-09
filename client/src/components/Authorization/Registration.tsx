@@ -26,7 +26,7 @@ export const Registration = () => {
   );
 
   return (
-    <div className="container">
+    <div className="auth-container">
       <Formik
         initialValues={{ email: '', password: '' }}
         validate={(values) => {

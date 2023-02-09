@@ -1,0 +1,51 @@
+.task__header {
+  margin-bottom: 20px;
+  color: #535557;
+}
+
+.task__description {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.13);
+  margin-bottom: 20px;
+  padding: 10px 0px;
+}
+
+.task__body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: #FFFFDD;
+  width: 90vw;
+  padding: 25px;
+
+  .task__table {
+    display: flex;
+    flex-direction: row;
+    gap: 8vw;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.13);
+    padding-bottom: 30px;
+
+    .task__table-col {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .left {
+      font-weight: bold;
+    }
+    .task__item {
+      color: #535557;
+
+    }
+  }
+
+  .search-icon-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 18px;
+    margin-top: 10px;
+    color: cornflowerblue;
+    text-decoration: none;
+  }
+}

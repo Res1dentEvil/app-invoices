@@ -2,6 +2,8 @@ export interface IState {
   isAuth: boolean;
   isLoading: boolean;
   currentUser: IUser;
+  tasksList: ITask[];
+  currentTask: ITask;
   error: string;
 }
 
@@ -18,13 +20,16 @@ export interface IAuthBody {
   password: string;
 }
 export interface ITask {
+  counter?: number;
+  _id?: string;
   owner: string;
   description: string;
+  assigned: string;
   // articleImage: string;
   articleImage: File;
   section: string;
   dateStart: string;
-  dateEnd: string | null;
+  dateUpdate: string;
   priority: string;
   whoCheckedList: string[];
   completed: boolean;

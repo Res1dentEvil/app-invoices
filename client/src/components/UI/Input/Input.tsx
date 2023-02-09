@@ -16,6 +16,7 @@ interface inputProps {
 export const Input = ({ type, placeholder, defaultValue, onChange }: inputProps) => {
   return (
     <input
+      className="input"
       id={placeholder}
       onChange={onChange}
       value={defaultValue}

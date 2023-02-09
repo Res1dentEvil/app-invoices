@@ -12,9 +12,8 @@ export const Header = () => {
     <header className="header">
       <div className="navbar">
         <div className="navbar__logo">
-          <img src="" alt="" className="navbar__logo-img" />
           <Link className="navbar__link navbar__logo-name" to="/">
-            MERN LOGO
+            LOGO
           </Link>
         </div>
         <div className="navbar__links">

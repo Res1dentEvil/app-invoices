@@ -12,10 +12,10 @@
   padding: 0 5px;
 }
 .main__wrapper {
-  //background: #313335;
+
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   padding: 20px;
   min-height: 90vh;

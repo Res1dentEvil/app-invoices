@@ -1,69 +1,79 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { Link, useNavigate } from 'react-router-dom';
-import { createTask, registration } from '../../store/reducers/ActionCreators';
+import { createTask } from '../../store/reducers/ActionCreators';
 import { ITask } from '../../../types';
 import './CreateTask.scss';
 import { Button, FormControl, InputLabel, MenuItem, TextField } from '@mui/material';
 import Select from '@mui/material/Select';
 
-interface IFormikErrors {
-  email: string;
-  password: string;
-}
-
 const CreateTask = () => {
   const dispatch = useAppDispatch();
-  const { isAuth, currentUser } = useAppSelector((state) => state.storeReducer);
-  const router = useNavigate();
-  const token = localStorage.getItem('token');
+  const { currentUser } = useAppSelector((state) => state.storeReducer);
 
   const [description, setDescription] = useState('');
-  const [section, setSection] = useState('section');
-  const [priority, setPriority] = useState('Low');
+  const [section, setSection] = useState('Тваринники');
+  const [assigned, setAssigned] = useState('Центр контролю закупок');
+  const [priority, setPriority] = useState('Звичайний');
   const [file, setFile] = useState<FileList | null>();
   const [errors, setErrors] = useState('');
 
   const handleSubmit = async (e: React.MouseEvent) => {
-    e.preventDefault();
+    // e.preventDefault();
 
     if (!description) {
       setErrors('description field cannot be empty');
-      // alert('field description required');
       return;
     } else if (!file) {
       setErrors('file field cannot be empty');
-      // alert('field file required');
       return;
     }
 
     const task: ITask = {
       owner: currentUser.id,
       description: description,
+      assigned: assigned,
       articleImage: file![0],
+      // articleImage: URL.createObjectURL(file![0]),
       section: section,
       dateStart: '',
-      dateEnd: '',
+      dateUpdate: '',
       priority: priority,
       whoCheckedList: [],
       completed: false,
     };
-    console.log(`client ${task}`);
     dispatch(createTask(task));
   };
 
   return (
-    <div className="container">
+    <div className="create-container">
       <form className="form__authorization">
-        <h2>CREATE TASK</h2>
+        <h2>Створити завдання</h2>
 
         <div className="input__container">
-          <TextField label="Description" onChange={(e) => setDescription(e.target.value)} />
+          <TextField label="Тема" onChange={(e) => setDescription(e.target.value)} />
         </div>
 
         <div className="input__container">
           <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">Section</InputLabel>
+            <InputLabel id="demo-simple-select-label">Призначено до</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={assigned}
+              label="Priority"
+              onChange={(e) => setAssigned(e.target.value)}
+            >
+              <MenuItem value={'Центр контролю закупок'}>Центр контролю закупок</MenuItem>
+              <MenuItem value={'Виконавчий директор'}>Виконавчий директор</MenuItem>
+              <MenuItem value={'Головний бухгалтер'}>Головний бухгалтер</MenuItem>
+              <MenuItem value={'Директор по тваринництву'}>Директор по тваринництву</MenuItem>
+            </Select>
+          </FormControl>
+        </div>
+
+        <div className="input__container">
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">Відділ</InputLabel>
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
@@ -71,15 +81,15 @@ const CreateTask = () => {
               label="Section"
               onChange={(e) => setSection(e.target.value)}
             >
-              <MenuItem value={'section'}>section1</MenuItem>
-              <MenuItem value={'section2'}>section2</MenuItem>
+              <MenuItem value={'Тваринники'}>Тваринники</MenuItem>
+              <MenuItem value={'Рослинники'}>Рослинники</MenuItem>
             </Select>
           </FormControl>
         </div>
 
         <div className="input__container">
           <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">Priority</InputLabel>
+            <InputLabel id="demo-simple-select-label">Пріоритет</InputLabel>
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
@@ -87,8 +97,8 @@ const CreateTask = () => {
               label="Priority"
               onChange={(e) => setPriority(e.target.value)}
             >
-              <MenuItem value={'Low'}>Low</MenuItem>
-              <MenuItem value={'High'}>High</MenuItem>
+              <MenuItem value={'Терміновий'}>Терміновий</MenuItem>
+              <MenuItem value={'Звичайний'}>Звичайний</MenuItem>
             </Select>
           </FormControl>
         </div>
@@ -112,12 +122,8 @@ const CreateTask = () => {
           type={'submit'}
           onClick={handleSubmit}
         >
-          Create
+          Створити
         </Button>
-
-        {/*<button className="btn btn_registration" type={'submit'} onClick={handleSubmit}>*/}
-        {/*  Create*/}
-        {/*</button>*/}
       </form>
     </div>
   );

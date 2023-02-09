@@ -1,0 +1,71 @@
+.table-container {
+  .col-counter {
+    width: 35px;
+    overflow: hidden;
+    font-weight: bold;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+  .col-description {
+    width: 500px;
+    overflow: hidden;
+    font-weight: bold;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  .col-assigned {
+    width: 230px;
+    overflow: hidden;
+
+    &:hover {
+      cursor: pointer;
+    }
+
+  }
+
+  .col-section {
+    width: 130px;
+    overflow: hidden;
+
+    &:hover {
+      cursor: pointer;
+    }
+
+  }
+
+  .col-dateStart {
+    width: 100px;
+    overflow: hidden;
+
+    &:hover {
+      cursor: pointer;
+    }
+
+  }
+
+  .col-priority {
+    width: 100px;
+    overflow: hidden;
+
+    &:hover {
+      cursor: pointer;
+    }
+
+  }
+
+  .col-completed {
+    width: 80px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+  }
+
+}
+

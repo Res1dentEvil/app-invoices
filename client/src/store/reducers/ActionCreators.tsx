@@ -47,6 +47,7 @@ export const auth = () => async (dispatch: AppDispatch) => {
     localStorage.setItem('token', response.data.token);
   } catch (e) {
     console.log('auth error');
+    dispatch(storeSlice.actions.logout);
     const error = e as AxiosError;
     localStorage.removeItem('token');
   }
@@ -58,10 +59,11 @@ export const createTask = (body: ITask) => async (dispatch: AppDispatch) => {
   const formData = new FormData();
   formData.append('owner', body.owner);
   formData.append('description', body.description);
+  formData.append('assigned', body.assigned);
   formData.append('articleImage', body.articleImage);
   formData.append('section', body.section);
   formData.append('dateStart', body.dateStart);
-  formData.append('dateEnd', '');
+  formData.append('dateUpdate', body.dateUpdate);
   formData.append('priority', body.priority);
   formData.append('whoCheckedList', JSON.stringify([]));
   formData.append('completed', 'false');
@@ -79,5 +81,36 @@ export const createTask = (body: ITask) => async (dispatch: AppDispatch) => {
     console.log('error');
     const error = e as AxiosError;
     dispatch(storeSlice.actions.authFetchingError(JSON.stringify(error.response?.data)));
+  }
+};
+
+export const getAllTasks = () => async (dispatch: AppDispatch) => {
+  try {
+    dispatch(storeSlice.actions.fetching());
+    const response = await axios
+      .get(`${baseURL}/api/task`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      })
+      .then((response) => {
+        // console.log(response.data);
+        dispatch(storeSlice.actions.setTasksList(response.data));
+        dispatch(storeSlice.actions.fetchingSuccess());
+      });
+  } catch (e) {
+    const error = e as AxiosError;
+  }
+};
+
+export const getTask = (id: string) => async (dispatch: AppDispatch) => {
+  try {
+    dispatch(storeSlice.actions.fetching());
+    const response = await axios.get(`${baseURL}/api/task/${id}`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+    });
+    dispatch(storeSlice.actions.setCurrentTask(response.data));
+    // dispatch(storeSlice.actions.fetchingSuccess());
+    // console.log(response.data);
+  } catch (e) {
+    const error = e as AxiosError;
   }
 };

@@ -11,11 +11,11 @@ import { TaskList } from '../TaskList/TaskList';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { auth } from '../../store/reducers/ActionCreators';
 import CreateTask from '../CreateTask/CreateTask';
+import { Task } from '../Task/Task';
 
 export const App = () => {
   const dispatch = useAppDispatch();
   const { isAuth } = useAppSelector((state) => state.storeReducer);
-  const router = useNavigate();
 
   useEffect(() => {
     dispatch(auth());
@@ -35,6 +35,7 @@ export const App = () => {
           <Routes>
             <Route path="/" element={<TaskList />} />
             <Route path="/create" element={<CreateTask />} />
+            <Route path="/task/:id" element={<Task />} />
             {/*<Route path="*" element={<NotFound />} />*/}
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>

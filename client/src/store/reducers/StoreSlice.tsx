@@ -1,12 +1,14 @@
 import React from 'react';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IState, IUser } from '../../../types';
-import { useNavigate } from 'react-router-dom';
+import { IState, ITask, IUser } from '../../../types';
 
 const initialState: IState = {
   isAuth: !!localStorage.getItem('token'),
+  // isAuth: false,
   isLoading: false,
   currentUser: {} as IUser,
+  tasksList: [] as ITask[],
+  currentTask: {} as ITask,
   error: '',
 };
 
@@ -43,6 +45,12 @@ export const storeSlice = createSlice({
       state.currentUser = {} as IUser;
       localStorage.removeItem('token');
       console.log('logout...');
+    },
+    setTasksList(state, action: PayloadAction<ITask[]>) {
+      state.tasksList = action.payload;
+    },
+    setCurrentTask(state, action: PayloadAction<ITask>) {
+      state.currentTask = action.payload;
     },
   },
 });

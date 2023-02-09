@@ -18,7 +18,7 @@ export const Login = () => {
   const { isAuth } = useAppSelector((state) => state.storeReducer);
 
   return (
-    <div className="container">
+    <div className="auth-container">
       <Formik
         initialValues={{ email: '', password: '' }}
         validate={(values) => {
