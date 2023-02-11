@@ -25,7 +25,6 @@ router.post("/create", upload.single("articleImage"), async (req, res) => {
       { value: currentTaskCounter[0].value + 1 }
     );
     await updateTaskCounter.save();
-    // console.log(updateTaskCounter);
 
     const task = new Task({
       counter: updateTaskCounter.value,
@@ -35,6 +34,7 @@ router.post("/create", upload.single("articleImage"), async (req, res) => {
       articleImage: `${req.body.description}_${req.file.originalname}`,
       section: req.body.section,
       dateStart: Date.now(),
+      dateEnd: req.body.dateEnd,
       dateUpdate: Date.now(),
       priority: req.body.priority,
       whoCheckedList: [],
@@ -50,7 +50,6 @@ router.post("/create", upload.single("articleImage"), async (req, res) => {
 //all tasks
 router.get("/", async (req, res) => {
   try {
-    //const { userId } = req.query
     const tasks = await Task.find({});
     await res.json(tasks);
   } catch (error) {
@@ -64,6 +63,26 @@ router.get("/:id", async (req, res) => {
     // const { id } = req.body;
     const task = await Task.findOne({ _id: req.params.id });
     await res.json(task);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+//edit task
+router.put("/edit/:id", async (req, res) => {
+  try {
+    const { id, description, assigned, dateUpdate } = req.body;
+    const task = await Task.findOneAndUpdate(
+      { _id: id },
+      {
+        description: description,
+        assigned: assigned,
+        dateUpdate: dateUpdate,
+      }
+    );
+
+    await task.save();
+    await res.json(await Task.findOne({ _id: id }));
   } catch (error) {
     console.log(error);
   }

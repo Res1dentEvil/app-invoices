@@ -22,8 +22,7 @@ import LastPageIcon from '@mui/icons-material/LastPage';
 import './TaskList.scss';
 import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
 import Preloader from '../../assets/Preloader';
-import { formatingData } from '../../services/formatingData';
-import { storeSlice } from '../../store/reducers/StoreSlice';
+import { formatingDate } from '../../services/formatingDate';
 
 interface TablePaginationActionsProps {
   count: number;
@@ -126,7 +125,6 @@ export const TaskList = () => {
   };
 
   useEffect(() => {
-    dispatch(auth());
     dispatch(getAllTasks());
   }, [isAuth]);
 
@@ -150,6 +148,7 @@ export const TaskList = () => {
                   <StyledTableCell align="center">Призначено до</StyledTableCell>
                   <StyledTableCell align="center">Відділ</StyledTableCell>
                   <StyledTableCell align="center">Початок</StyledTableCell>
+                  <StyledTableCell align="center">Кінець</StyledTableCell>
                   <StyledTableCell align="center">Пріоритет</StyledTableCell>
                   <StyledTableCell align="center">Статус оплати</StyledTableCell>
                 </TableRow>
@@ -160,7 +159,7 @@ export const TaskList = () => {
                   : tasksList
                 ).map((task) => (
                   <StyledTableRow
-                    key={task.description}
+                    key={task._id}
                     onClick={() => {
                       router(`/task/${task._id}`);
                     }}
@@ -178,7 +177,10 @@ export const TaskList = () => {
                       <div className="col-section">{task.section}</div>
                     </StyledTableCell>
                     <StyledTableCell align="center">
-                      <div className="col-dateStart">{formatingData(task.dateStart)}</div>
+                      <div className="col-dateStart">{formatingDate(task.dateStart)}</div>
+                    </StyledTableCell>
+                    <StyledTableCell align="center">
+                      <div className="col-dateStart">{formatingDate(task.dateEnd)}</div>
                     </StyledTableCell>
                     <StyledTableCell align="center">
                       <div className="col-priority">{task.priority}</div>

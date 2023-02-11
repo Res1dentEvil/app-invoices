@@ -8,6 +8,7 @@ const schema = new Schema({
   articleImage: { type: String, required: true },
   section: { type: String, required: true },
   dateStart: { type: Date, default: Date.now() },
+  dateEnd: { type: Date },
   dateUpdate: { type: Date },
   priority: { type: String, required: true },
   whoCheckedList: [{ type: String }],

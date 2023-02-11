@@ -1,7 +1,7 @@
 import { AppDispatch } from '../store';
 import { storeSlice } from './StoreSlice';
 import axios, { AxiosError } from 'axios';
-import { IAuthBody, ITask } from '../../../types';
+import { IAuthBody, ITask } from '../../services/types';
 
 const baseURL = `http://localhost:5000`;
 
@@ -47,7 +47,7 @@ export const auth = () => async (dispatch: AppDispatch) => {
     localStorage.setItem('token', response.data.token);
   } catch (e) {
     console.log('auth error');
-    dispatch(storeSlice.actions.logout);
+    dispatch(storeSlice.actions.logout());
     const error = e as AxiosError;
     localStorage.removeItem('token');
   }
@@ -63,6 +63,7 @@ export const createTask = (body: ITask) => async (dispatch: AppDispatch) => {
   formData.append('articleImage', body.articleImage);
   formData.append('section', body.section);
   formData.append('dateStart', body.dateStart);
+  formData.append('dateEnd', body.dateEnd);
   formData.append('dateUpdate', body.dateUpdate);
   formData.append('priority', body.priority);
   formData.append('whoCheckedList', JSON.stringify([]));
@@ -108,9 +109,28 @@ export const getTask = (id: string) => async (dispatch: AppDispatch) => {
       headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
     });
     dispatch(storeSlice.actions.setCurrentTask(response.data));
-    // dispatch(storeSlice.actions.fetchingSuccess());
-    // console.log(response.data);
   } catch (e) {
     const error = e as AxiosError;
   }
 };
+
+export const editTask =
+  (id: string, description: string, assigned: string) => async (dispatch: AppDispatch) => {
+    try {
+      const response = await axios.put(
+        `${baseURL}/api/task/edit/${id}`,
+        {
+          id,
+          description,
+          assigned,
+          dateUpdate: Date.now(),
+        },
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+        }
+      );
+      dispatch(storeSlice.actions.setCurrentTask(response.data));
+    } catch (e) {
+      const error = e as AxiosError;
+    }
+  };

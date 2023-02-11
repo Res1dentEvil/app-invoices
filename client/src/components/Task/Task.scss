@@ -7,6 +7,27 @@
   border-bottom: 1px solid rgba(0, 0, 0, 0.13);
   margin-bottom: 20px;
   padding: 10px 0px;
+
+  h3 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    overflow: auto;
+
+    .edit-icon {
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+}
+.task__assigned {
+  .edit-icon {
+    &:hover {
+      cursor: pointer;
+    }
+  }
 }
 
 .task__body {
@@ -15,7 +36,12 @@
   gap: 10px;
   background: #FFFFDD;
   width: 90vw;
-  padding: 25px;
+  padding: 35px 25px;
+
+  .edit-mode-panel {
+    display: flex;
+    gap: 25px;
+  }
 
   .task__table {
     display: flex;
@@ -33,19 +59,36 @@
     .left {
       font-weight: bold;
     }
+
     .task__item {
       color: #535557;
-
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 10px;
     }
   }
 
   .search-icon-link {
     display: flex;
-    align-items: center;
+    align-items: flex-end;
+    width: 100%;
     gap: 8px;
-    font-size: 18px;
+    font-size: 17px;
+    font-weight: bold;
     margin-top: 10px;
     color: cornflowerblue;
     text-decoration: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.13);
+    padding-bottom: 25px;
+    margin-bottom: 25px;
   }
+}
+
+.select__container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  max-width: 20vw;
+
 }

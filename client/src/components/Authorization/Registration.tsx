@@ -19,7 +19,7 @@ export const Registration = () => {
   const { error } = useAppSelector((state) => state.storeReducer);
   useEffect(
     () => () => {
-      console.log('registration unmount');
+      // console.log('registration unmount');
       dispatch(storeSlice.actions.authFetchingError(''));
     },
     []

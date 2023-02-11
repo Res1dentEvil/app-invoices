@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+    <link rel="stylesheet" href="css/style2.css">
+</head>
+<body>
+<div class="chart-container">
+	<canvas id="myChart"></canvas>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+<script>
+
+var ctx = document.getElementById('myChart').getContext('2d');
+Chart.defaults.global.elements.point.radius = 3;
+var chart = new Chart(ctx, {
+
+    // The type of chart we want to create
+    type: 'line',
+
+    // The data for our dataset
+    data: {
+        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'January'],
+        datasets: [{
+            label: 'price',
+            backgroundColor: 'rgb(255, 99, 132, 0)',
+            borderColor: 'rgb(255, 99, 132)',
+            data: [0, 10, 5, 2, 20, 30, 45, 26]
+        }]
+    },
+
+    // Configuration options go here
+    options: {
+    	legend:{
+    		position:"bottom"}
+    }
+});
+</script>
+
+</body>
+</html>

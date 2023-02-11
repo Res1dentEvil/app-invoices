@@ -1,6 +1,6 @@
 import React from 'react';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IState, ITask, IUser } from '../../../types';
+import { IState, ITask, IUser } from '../../services/types';
 
 const initialState: IState = {
   isAuth: !!localStorage.getItem('token'),

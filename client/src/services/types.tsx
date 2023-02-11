@@ -25,12 +25,20 @@ export interface ITask {
   owner: string;
   description: string;
   assigned: string;
-  // articleImage: string;
   articleImage: File;
   section: string;
   dateStart: string;
   dateUpdate: string;
+  dateEnd: string;
   priority: string;
   whoCheckedList: string[];
   completed: boolean;
+}
+
+export enum ManagerPositions {
+  ProcurementControl = 'Центр контролю закупок',
+  GeneralDirector = 'Виконавчий директор',
+  ChiefAccountant = 'Головний бухгалтер',
+  DirectorAnimalHusbandry = 'Директор по тваринництву',
+  ChiefEngineer = 'Головний інженер',
 }
