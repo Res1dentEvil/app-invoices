@@ -5,10 +5,19 @@
   align-items: center;
   height: 10vh;
   padding: 0 20px;
-  font-size: 1.5em;
+  font-size: 1.3em;
   color: #F7F4EE;
   font-weight: lighter;
   box-shadow: 0 3px 5px rgba(57, 63, 72, 0.3);
+
+  .header__email {
+    display: flex;
+    align-items: center;
+    color: white;
+    font-size: 12px;
+    font-style: italic;
+  }
+
   .navbar__links {
     display: flex;
     gap: 30px;

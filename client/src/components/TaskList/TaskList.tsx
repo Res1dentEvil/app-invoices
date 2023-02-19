@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { useNavigate } from 'react-router-dom';
-import { auth, getAllTasks } from '../../store/reducers/ActionCreators';
+import { getAllTasks } from '../../store/reducers/ActionCreators';
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -23,6 +23,12 @@ import './TaskList.scss';
 import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
 import Preloader from '../../assets/Preloader';
 import { formatingDate } from '../../services/formatingDate';
+import { ColorMaterialUI } from '../../services/ColorMaterialUI';
+import { getPaymentStatus } from '../../services/getPaymentStatus';
+import axios from 'axios';
+import { storeSlice } from '../../store/reducers/StoreSlice';
+import { ITask } from '../../services/types';
+import { filteredTasksByRoles } from '../../services/filteredTasksByRoles';
 
 interface TablePaginationActionsProps {
   count: number;
@@ -83,7 +89,7 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
+    backgroundColor: ColorMaterialUI.palette.primary.dark,
     color: theme.palette.common.white,
     fontWeight: 600,
   },
@@ -104,9 +110,12 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 export const TaskList = () => {
   const dispatch = useAppDispatch();
-  const { tasksList, isAuth, isLoading } = useAppSelector((state) => state.storeReducer);
+  const { tasksList, isAuth, isLoading, currentUser } = useAppSelector(
+    (state) => state.storeReducer
+  );
   const router = useNavigate();
 
+  const [tasks, setTasks] = useState<ITask[] | null>();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -125,7 +134,19 @@ export const TaskList = () => {
   };
 
   useEffect(() => {
-    dispatch(getAllTasks());
+    const fetchData = async () => {
+      const response = await axios
+        .get(`http://localhost:5000/api/task`, {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+        })
+        .then((response) => {
+          // console.log(response.data);
+          dispatch(storeSlice.actions.setTasksList(response.data));
+          dispatch(storeSlice.actions.fetchingSuccess());
+          setTasks(response.data);
+        });
+    };
+    fetchData();
   }, [isAuth]);
 
   if (isLoading) {
@@ -155,8 +176,11 @@ export const TaskList = () => {
               </TableHead>
               <TableBody>
                 {(rowsPerPage > 0
-                  ? tasksList.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  : tasksList
+                  ? filteredTasksByRoles(tasksList, currentUser.roles[0]).slice(
+                      page * rowsPerPage,
+                      page * rowsPerPage + rowsPerPage
+                    )
+                  : filteredTasksByRoles(tasksList, currentUser.roles[0])
                 ).map((task) => (
                   <StyledTableRow
                     key={task._id}
@@ -183,16 +207,16 @@ export const TaskList = () => {
                       <div className="col-dateStart">{formatingDate(task.dateEnd)}</div>
                     </StyledTableCell>
                     <StyledTableCell align="center">
-                      <div className="col-priority">{task.priority}</div>
+                      <div
+                        className={`col-priority ${
+                          task.priority == 'Терміновий' && 'high-priority'
+                        } `}
+                      >
+                        {task.priority}
+                      </div>
                     </StyledTableCell>
                     <StyledTableCell align="center">
-                      <div className="col-completed">
-                        {task.completed ? (
-                          <CheckCircleOutlinedIcon style={{ fill: 'green' }} />
-                        ) : (
-                          'Очікування'
-                        )}
-                      </div>
+                      <div className="col-completed">{getPaymentStatus(task.completed)}</div>
                     </StyledTableCell>
                   </StyledTableRow>
                 ))}

@@ -4,12 +4,12 @@ import { IState, ITask, IUser } from '../../services/types';
 
 const initialState: IState = {
   isAuth: !!localStorage.getItem('token'),
-  // isAuth: false,
   isLoading: false,
   currentUser: {} as IUser,
   tasksList: [] as ITask[],
   currentTask: {} as ITask,
   error: '',
+  showSuccessAlert: false,
 };
 
 export const storeSlice = createSlice({
@@ -52,6 +52,9 @@ export const storeSlice = createSlice({
     setCurrentTask(state, action: PayloadAction<ITask>) {
       state.currentTask = action.payload;
     },
+    // setShowSuccessAlert(state, action: PayloadAction<boolean>) {
+    //   state.showSuccessAlert = action.payload;
+    // },
   },
 });
 

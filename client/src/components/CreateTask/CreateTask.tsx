@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { createTask } from '../../store/reducers/ActionCreators';
-import { ITask } from '../../services/types';
+import { ITask, PaymentStatus } from '../../services/types';
 import './CreateTask.scss';
-import { Button, FormControl, InputLabel, MenuItem, TextField } from '@mui/material';
+import { Alert, Button, FormControl, InputLabel, MenuItem, TextField } from '@mui/material';
 import Select from '@mui/material/Select';
 import { formatDate } from '../../services/formatingDate';
+import Stack from '@mui/material/Stack';
 
 const CreateTask = () => {
   const dispatch = useAppDispatch();
-  const { currentUser } = useAppSelector((state) => state.storeReducer);
+  const { currentUser, showSuccessAlert } = useAppSelector((state) => state.storeReducer);
 
   const [description, setDescription] = useState('');
   const [section, setSection] = useState('Тваринники');
@@ -42,13 +43,16 @@ const CreateTask = () => {
       dateUpdate: '',
       priority: priority,
       whoCheckedList: [],
-      completed: false,
+      completed: PaymentStatus.WAITING,
     };
-    dispatch(createTask(task));
+    await dispatch(createTask(task));
+    setDescription('');
+    setFile(null);
   };
 
   return (
     <div className="create-container">
+      {showSuccessAlert && <Alert onClose={() => {}}>Завдання успішно створене!</Alert>}
       <form className="form__authorization">
         <h2>Створити завдання</h2>
 

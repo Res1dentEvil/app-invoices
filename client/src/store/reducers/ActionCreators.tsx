@@ -30,6 +30,7 @@ export const login = (body: IAuthBody) => async (dispatch: AppDispatch) => {
     const response = await axios.post(`${baseURL}/api/auth/login`, body, {
       headers: { 'Content-Type': 'application/json' },
     });
+    // console.log('response.data.user', response.data.user);
     dispatch(storeSlice.actions.authFetchingSuccess(response.data.user));
     localStorage.setItem('token', response.data.token);
   } catch (e) {
@@ -67,7 +68,7 @@ export const createTask = (body: ITask) => async (dispatch: AppDispatch) => {
   formData.append('dateUpdate', body.dateUpdate);
   formData.append('priority', body.priority);
   formData.append('whoCheckedList', JSON.stringify([]));
-  formData.append('completed', 'false');
+  formData.append('completed', body.completed);
 
   try {
     dispatch(storeSlice.actions.fetching());
@@ -78,6 +79,10 @@ export const createTask = (body: ITask) => async (dispatch: AppDispatch) => {
       .then((response) => {
         console.log(response);
       });
+    // dispatch(storeSlice.actions.setShowSuccessAlert(true));
+    // setTimeout(() => {
+    //   dispatch(storeSlice.actions.setShowSuccessAlert(false));
+    // }, 4000);
   } catch (e) {
     console.log('error');
     const error = e as AxiosError;
@@ -123,6 +128,26 @@ export const editTask =
           id,
           description,
           assigned,
+          dateUpdate: Date.now(),
+        },
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+        }
+      );
+      dispatch(storeSlice.actions.setCurrentTask(response.data));
+    } catch (e) {
+      const error = e as AxiosError;
+    }
+  };
+
+export const changePaymentStatus =
+  (id: string, paymentStatus: string) => async (dispatch: AppDispatch) => {
+    try {
+      const response = await axios.put(
+        `${baseURL}/api/task/edit/status/${id}`,
+        {
+          id,
+          completed: paymentStatus,
           dateUpdate: Date.now(),
         },
         {

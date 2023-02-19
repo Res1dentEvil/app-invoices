@@ -67,6 +67,10 @@
       align-items: center;
       gap: 10px;
     }
+    .high-priority {
+      color: #b22a00;
+      font-weight: bold;
+    }
   }
 
   .search-icon-link {
@@ -90,5 +94,13 @@
   flex-direction: column;
   gap: 30px;
   max-width: 20vw;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.13);
+padding-bottom: 30px;
+}
+
+.accountant-panel {
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
 
 }

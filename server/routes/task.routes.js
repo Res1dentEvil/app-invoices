@@ -38,7 +38,7 @@ router.post("/create", upload.single("articleImage"), async (req, res) => {
       dateUpdate: Date.now(),
       priority: req.body.priority,
       whoCheckedList: [],
-      completed: false,
+      completed: req.body.completed,
     });
     await task.save();
     await res.json(task);
@@ -56,6 +56,17 @@ router.get("/", async (req, res) => {
     console.log(error);
   }
 });
+
+// //tasks by role
+// router.get("/:role", async (req, res) => {
+//   try {
+//     const { role } = req.body;
+//     const tasks = await Task.find({ role: [""] });
+//     await res.json(tasks);
+//   } catch (error) {
+//     console.log(error);
+//   }
+// });
 
 //task by id
 router.get("/:id", async (req, res) => {
@@ -77,6 +88,25 @@ router.put("/edit/:id", async (req, res) => {
       {
         description: description,
         assigned: assigned,
+        dateUpdate: dateUpdate,
+      }
+    );
+
+    await task.save();
+    await res.json(await Task.findOne({ _id: id }));
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+//edit task status
+router.put("/edit/status/:id", async (req, res) => {
+  try {
+    const { id, completed, dateUpdate } = req.body;
+    const task = await Task.findOneAndUpdate(
+      { _id: id },
+      {
+        completed: completed,
         dateUpdate: dateUpdate,
       }
     );

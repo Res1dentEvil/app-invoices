@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { storeSlice } from '../../store/reducers/StoreSlice';
 
 export const Header = () => {
-  const { isAuth } = useAppSelector((state) => state.storeReducer);
+  const { isAuth, currentUser } = useAppSelector((state) => state.storeReducer);
   const dispatch = useAppDispatch();
 
   return (
@@ -18,27 +18,29 @@ export const Header = () => {
         </div>
         <div className="navbar__links">
           {!isAuth && (
-            <Link className="navbar__link navbar__login" to="/login">
-              Login
-            </Link>
+            <>
+              <Link className="navbar__link navbar__login" to="/login">
+                Login
+              </Link>
+              <Link className="navbar__link navbar__registration" to="/registration">
+                Registration
+              </Link>
+            </>
           )}
-          {!isAuth && (
-            <Link className="navbar__link navbar__registration" to="/registration">
-              Registration
-            </Link>
-          )}
+
           {isAuth && (
-            <Link className="navbar__link navbar__registration" to="/create">
-              Create
-            </Link>
-          )}
-          {isAuth && (
-            <div
-              className="navbar__link navbar__registration"
-              onClick={() => dispatch(storeSlice.actions.logout())}
-            >
-              Logout
-            </div>
+            <>
+              <div className="header__email">{currentUser.email}</div>
+              <Link className="navbar__link navbar__registration" to="/create">
+                Створити
+              </Link>
+              <div
+                className="navbar__link navbar__registration"
+                onClick={() => dispatch(storeSlice.actions.logout())}
+              >
+                Вийти
+              </div>
+            </>
           )}
         </div>
       </div>

@@ -71,6 +71,7 @@ router.post("/login", async (req, res) => {
       user: {
         id: user.id,
         email: user.email,
+        roles: user.roles,
         avatar: user.avatar,
       },
     });
@@ -91,6 +92,7 @@ router.get("/auth", authMiddleware, async (req, res) => {
       user: {
         id: user.id,
         email: user.email,
+        roles: user.roles,
         avatar: user.avatar,
       },
     });

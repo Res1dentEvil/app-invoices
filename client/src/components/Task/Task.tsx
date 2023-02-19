@@ -1,25 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { editTask, getTask } from '../../store/reducers/ActionCreators';
+import { changePaymentStatus, editTask, getTask } from '../../store/reducers/ActionCreators';
 import FindInPageIcon from '@mui/icons-material/FindInPage';
 import Preloader from '../../assets/Preloader';
 import './Task.scss';
 import { dateDifference, formatingDate } from '../../services/formatingDate';
-import { FormControl, Input, InputLabel, MenuItem, TextField } from '@mui/material';
-import Select from '@mui/material/Select';
+import { InputLabel, TextField } from '@mui/material';
 import Button from '@mui/material/Button';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 import { storeSlice } from '../../store/reducers/StoreSlice';
 import CloudDoneOutlinedIcon from '@mui/icons-material/CloudDoneOutlined';
-import { ITask } from '../../services/types';
+import { ITask, PaymentStatus } from '../../services/types';
 import { SelectMUI } from '../UI/Select/Select';
 
 export const Task = () => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
-  const { currentTask } = useAppSelector((state) => state.storeReducer);
-
+  const { currentTask, currentUser } = useAppSelector((state) => state.storeReducer);
   const [assigned, setAssigned] = useState('Центр контролю закупок');
   const [editingAssigned, setEditingAssigned] = useState('Центр контролю закупок');
   const [description, setDescription] = useState<string | null>();
@@ -41,7 +39,7 @@ export const Task = () => {
     []
   );
 
-  if (!currentTask.description) {
+  if (!currentTask.description || !currentUser.roles) {
     return <Preloader />;
   }
   return (
@@ -52,23 +50,28 @@ export const Task = () => {
           {!editMode ? (
             <h3>
               {currentTask.description}
-              <span className="edit-icon" onClick={() => setEditMode(true)}>
-                <DriveFileRenameOutlineIcon style={{ fill: 'cornflowerblue' }} />
-              </span>
+              {currentUser.roles.includes('ADMIN') && (
+                <span className="edit-icon" onClick={() => setEditMode(true)}>
+                  <DriveFileRenameOutlineIcon style={{ fill: 'cornflowerblue' }} />
+                </span>
+              )}
             </h3>
           ) : (
             <div className="edit-mode-panel">
               <TextField
                 defaultValue={currentTask.description}
-                onChange={(e) => setDescription(e.target.value)}
+                onChange={(e) => {
+                  setDescription(e.target.value);
+                  setDisabledBtnEdit(false);
+                }}
                 size="small"
               />
               <Button
                 size="small"
                 variant="contained"
-                disabled={false}
+                disabled={disabledBtnEdit}
                 onClick={() => {
-                  dispatch(editTask(id!, description!, assigned!));
+                  dispatch(editTask(id!, description!, editingAssigned!));
                   setEditMode(false);
                 }}
               >
@@ -99,10 +102,12 @@ export const Task = () => {
             <div className="task__item task__assigned">
               {!editMode ? (
                 <>
-                  {currentTask.assigned}{' '}
-                  <span className="edit-icon" onClick={() => setEditMode(true)}>
-                    <DriveFileRenameOutlineIcon style={{ fill: 'cornflowerblue' }} />
-                  </span>
+                  {currentTask.assigned}
+                  {currentUser.roles.includes('ADMIN') && (
+                    <span className="edit-icon" onClick={() => setEditMode(true)}>
+                      <DriveFileRenameOutlineIcon style={{ fill: 'cornflowerblue' }} />
+                    </span>
+                  )}
                 </>
               ) : (
                 <>
@@ -125,7 +130,11 @@ export const Task = () => {
                 </>
               )}
             </div>
-            <div className="task__item">{currentTask.priority}</div>
+            <div
+              className={`task__item ${currentTask.priority == 'Терміновий' && 'high-priority'}`}
+            >
+              {currentTask.priority}
+            </div>
           </div>
         </div>
 
@@ -137,22 +146,49 @@ export const Task = () => {
         >
           <FindInPageIcon style={{ fill: 'grey' }} /> Переглянути рахунок
         </a>
+        {!currentUser.roles.includes('MODERATOR') && (
+          <div className="select__container">
+            <h3>Надіслати до</h3>
+            <SelectMUI
+              assigned={assigned}
+              setAssigned={setAssigned}
+              setDisabledBtn={setDisabledBtn}
+            />
+            <Button
+              style={{ maxWidth: '140px' }}
+              variant="contained"
+              disabled={disabledBtn}
+              onClick={() => {
+                dispatch(editTask(id!, description!, assigned!));
+              }}
+            >
+              Надіслати
+            </Button>
+          </div>
+        )}
 
-        <div className="select__container">
-          <SelectMUI
-            assigned={assigned}
-            setAssigned={setAssigned}
-            setDisabledBtn={setDisabledBtn}
-          />
+        <div className="accountant-panel">
           <Button
             style={{ maxWidth: '140px' }}
             variant="contained"
-            disabled={disabledBtn}
+            color="success"
+            disabled={currentTask.completed == PaymentStatus.PAID && true}
             onClick={() => {
-              dispatch(editTask(id!, description!, assigned!));
+              dispatch(changePaymentStatus(id!, PaymentStatus.PAID));
             }}
           >
-            Застосувати
+            Сплатити
+          </Button>
+          <Button
+            style={{ maxWidth: '140px' }}
+            variant="contained"
+            color="error"
+            disabled={currentTask.completed == PaymentStatus.CANCELED && true}
+            onClick={() => {
+              dispatch(changePaymentStatus(id!, PaymentStatus.CANCELED));
+            }}
+          >
+            Відхилити
           </Button>
         </div>
       </div>

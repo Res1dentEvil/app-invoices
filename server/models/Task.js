@@ -12,7 +12,7 @@ const schema = new Schema({
   dateUpdate: { type: Date },
   priority: { type: String, required: true },
   whoCheckedList: [{ type: String }],
-  completed: false,
+  completed: String,
 });
 
 module.exports = model("Task", schema);

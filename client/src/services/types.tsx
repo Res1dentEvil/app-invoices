@@ -5,12 +5,14 @@ export interface IState {
   tasksList: ITask[];
   currentTask: ITask;
   error: string;
+  showSuccessAlert: boolean;
 }
 
 export interface IUser {
   id: string;
   email: string;
   password: string;
+  roles: string[];
   avatar?: string;
   files?: [{}];
 }
@@ -32,7 +34,7 @@ export interface ITask {
   dateEnd: string;
   priority: string;
   whoCheckedList: string[];
-  completed: boolean;
+  completed: string;
 }
 
 export enum ManagerPositions {
@@ -41,4 +43,10 @@ export enum ManagerPositions {
   ChiefAccountant = 'Головний бухгалтер',
   DirectorAnimalHusbandry = 'Директор по тваринництву',
   ChiefEngineer = 'Головний інженер',
+}
+
+export enum PaymentStatus {
+  WAITING = 'Очікування',
+  PAID = 'Оплачено',
+  CANCELED = 'Відхилено',
 }

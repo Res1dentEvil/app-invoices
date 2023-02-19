@@ -11,7 +11,7 @@ interface ISelectProps {
 export const SelectMUI = <C extends React.ElementType>(props: ISelectProps) => {
   return (
     <FormControl fullWidth size="small">
-      <InputLabel id="demo-simple-select-label">Призначено до</InputLabel>
+      <InputLabel id="demo-simple-select-label">Призначити до</InputLabel>
       <Select
         labelId="demo-simple-select-label"
         id="demo-simple-select"
