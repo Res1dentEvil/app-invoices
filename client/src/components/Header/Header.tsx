@@ -1,6 +1,9 @@
-import React from 'react';
 import './Header.scss';
+
+import React from 'react';
 import { Link } from 'react-router-dom';
+
+import Logo from '../../assets/img/logo.png';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { storeSlice } from '../../store/reducers/StoreSlice';
 
@@ -13,7 +16,7 @@ export const Header = () => {
       <div className="navbar">
         <div className="navbar__logo">
           <Link className="navbar__link navbar__logo-name" to="/">
-            LOGO
+            <img src={Logo} alt="logo" className="logo-img" />
           </Link>
         </div>
         <div className="navbar__links">

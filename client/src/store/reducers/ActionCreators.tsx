@@ -1,7 +1,8 @@
+import axios, { AxiosError } from 'axios';
+
+import { IAuthBody, ITask } from '../../services/types';
 import { AppDispatch } from '../store';
 import { storeSlice } from './StoreSlice';
-import axios, { AxiosError } from 'axios';
-import { IAuthBody, ITask } from '../../services/types';
 
 const baseURL = `http://localhost:5000`;
 
@@ -99,7 +100,7 @@ export const getAllTasks = () => async (dispatch: AppDispatch) => {
       })
       .then((response) => {
         // console.log(response.data);
-        dispatch(storeSlice.actions.setTasksList(response.data));
+        dispatch(storeSlice.actions.setTasksList(response.data.reverse()));
         dispatch(storeSlice.actions.fetchingSuccess());
       });
   } catch (e) {
@@ -135,6 +136,30 @@ export const editTask =
         }
       );
       dispatch(storeSlice.actions.setCurrentTask(response.data));
+    } catch (e) {
+      const error = e as AxiosError;
+    }
+  };
+
+export const changeDestination =
+  (id: string, assigned: string, userRole: string, whoCheckedList: string[]) =>
+  async (dispatch: AppDispatch) => {
+    try {
+      const response = await axios.put(
+        `${baseURL}/api/task/edit/destination/${id}`,
+        {
+          id,
+          assigned,
+          dateUpdate: Date.now(),
+          userRole,
+          whoCheckedList,
+        },
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+        }
+      );
+      dispatch(storeSlice.actions.setCurrentTask(response.data));
+      console.log(response.data);
     } catch (e) {
       const error = e as AxiosError;
     }

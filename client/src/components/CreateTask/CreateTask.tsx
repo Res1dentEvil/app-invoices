@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { createTask } from '../../store/reducers/ActionCreators';
-import { ITask, PaymentStatus } from '../../services/types';
 import './CreateTask.scss';
+
 import { Alert, Button, FormControl, InputLabel, MenuItem, TextField } from '@mui/material';
 import Select from '@mui/material/Select';
-import { formatDate } from '../../services/formatingDate';
 import Stack from '@mui/material/Stack';
+import React, { useState } from 'react';
+
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { formatDate } from '../../services/formatingDate';
+import { ITask, PaymentStatus } from '../../services/types';
+import { createTask } from '../../store/reducers/ActionCreators';
 
 const CreateTask = () => {
   const dispatch = useAppDispatch();

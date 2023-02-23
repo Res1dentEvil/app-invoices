@@ -14,7 +14,7 @@ export interface IUser {
   password: string;
   roles: string[];
   avatar?: string;
-  files?: [{}];
+  // files?: [{}];
 }
 
 export interface IAuthBody {

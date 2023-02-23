@@ -57,17 +57,6 @@ router.get("/", async (req, res) => {
   }
 });
 
-// //tasks by role
-// router.get("/:role", async (req, res) => {
-//   try {
-//     const { role } = req.body;
-//     const tasks = await Task.find({ role: [""] });
-//     await res.json(tasks);
-//   } catch (error) {
-//     console.log(error);
-//   }
-// });
-
 //task by id
 router.get("/:id", async (req, res) => {
   try {
@@ -108,6 +97,26 @@ router.put("/edit/status/:id", async (req, res) => {
       {
         completed: completed,
         dateUpdate: dateUpdate,
+      }
+    );
+
+    await task.save();
+    await res.json(await Task.findOne({ _id: id }));
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+//edit task destination
+router.put("/edit/destination/:id", async (req, res) => {
+  try {
+    const { id, assigned, dateUpdate, userRole, whoCheckedList } = req.body;
+    const task = await Task.findOneAndUpdate(
+      { _id: id },
+      {
+        assigned: assigned,
+        dateUpdate: dateUpdate,
+        whoCheckedList: [...whoCheckedList, userRole],
       }
     );
 

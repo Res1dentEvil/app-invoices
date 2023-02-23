@@ -1,5 +1,6 @@
-import React from 'react';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import React from 'react';
+
 import { IState, ITask, IUser } from '../../services/types';
 
 const initialState: IState = {

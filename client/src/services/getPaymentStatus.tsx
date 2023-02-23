@@ -1,7 +1,8 @@
-import React from 'react';
-import { PaymentStatus } from './types';
-import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
+import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
+import React from 'react';
+
+import { PaymentStatus } from './types';
 
 export function getPaymentStatus(status: string) {
   switch (status) {

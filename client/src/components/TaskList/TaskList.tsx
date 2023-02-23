@@ -1,34 +1,32 @@
-import React, { useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { useNavigate } from 'react-router-dom';
-import { getAllTasks } from '../../store/reducers/ActionCreators';
-import { styled } from '@mui/material/styles';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import { useTheme } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import TableFooter from '@mui/material/TableFooter';
-import TablePagination from '@mui/material/TablePagination';
-import Paper from '@mui/material/Paper';
-import IconButton from '@mui/material/IconButton';
+import './TaskList.scss';
+
 import FirstPageIcon from '@mui/icons-material/FirstPage';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import LastPageIcon from '@mui/icons-material/LastPage';
-import './TaskList.scss';
-import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
+import { Checkbox, FormControlLabel } from '@mui/material';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Paper from '@mui/material/Paper';
+import { styled, useTheme } from '@mui/material/styles';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableFooter from '@mui/material/TableFooter';
+import TableHead from '@mui/material/TableHead';
+import TablePagination from '@mui/material/TablePagination';
+import TableRow from '@mui/material/TableRow';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import Preloader from '../../assets/Preloader';
-import { formatingDate } from '../../services/formatingDate';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { ColorMaterialUI } from '../../services/ColorMaterialUI';
-import { getPaymentStatus } from '../../services/getPaymentStatus';
-import axios from 'axios';
-import { storeSlice } from '../../store/reducers/StoreSlice';
-import { ITask } from '../../services/types';
 import { filteredTasksByRoles } from '../../services/filteredTasksByRoles';
+import { formatingDate } from '../../services/formatingDate';
+import { getPaymentStatus } from '../../services/getPaymentStatus';
+import { getAllTasks } from '../../store/reducers/ActionCreators';
 
 interface TablePaginationActionsProps {
   count: number;
@@ -115,7 +113,8 @@ export const TaskList = () => {
   );
   const router = useNavigate();
 
-  const [tasks, setTasks] = useState<ITask[] | null>();
+  const [showUncompletedTasks, setShowUncompletedTasks] = useState<boolean>(true);
+  const [showCompletedTasks, setShowCompletedTasks] = useState<boolean>(false);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -134,19 +133,7 @@ export const TaskList = () => {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      const response = await axios
-        .get(`http://localhost:5000/api/task`, {
-          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-        })
-        .then((response) => {
-          // console.log(response.data);
-          dispatch(storeSlice.actions.setTasksList(response.data));
-          dispatch(storeSlice.actions.fetchingSuccess());
-          setTasks(response.data);
-        });
-    };
-    fetchData();
+    dispatch(getAllTasks());
   }, [isAuth]);
 
   if (isLoading) {
@@ -160,6 +147,30 @@ export const TaskList = () => {
       ) : (
         <div className="table-container">
           <h1>Мої завдання</h1>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={showUncompletedTasks}
+                onChange={() => {
+                  setShowUncompletedTasks(!showUncompletedTasks);
+                  setShowCompletedTasks(!showCompletedTasks);
+                }}
+              />
+            }
+            label="Відображати тільки незавершені завдання"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={showCompletedTasks}
+                onChange={() => {
+                  setShowUncompletedTasks(!showUncompletedTasks);
+                  setShowCompletedTasks(!showCompletedTasks);
+                }}
+              />
+            }
+            label="Відображати тільки завершені або відхилені завдання"
+          />
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 1000 }} aria-label="custom pagination table">
               <TableHead>
@@ -176,11 +187,18 @@ export const TaskList = () => {
               </TableHead>
               <TableBody>
                 {(rowsPerPage > 0
-                  ? filteredTasksByRoles(tasksList, currentUser.roles[0]).slice(
-                      page * rowsPerPage,
-                      page * rowsPerPage + rowsPerPage
+                  ? filteredTasksByRoles(
+                      tasksList,
+                      currentUser.roles[0],
+                      showUncompletedTasks,
+                      showCompletedTasks
+                    ).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  : filteredTasksByRoles(
+                      tasksList,
+                      currentUser.roles[0],
+                      showUncompletedTasks,
+                      showCompletedTasks
                     )
-                  : filteredTasksByRoles(tasksList, currentUser.roles[0])
                 ).map((task) => (
                   <StyledTableRow
                     key={task._id}
@@ -231,7 +249,14 @@ export const TaskList = () => {
                   <TablePagination
                     rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
                     colSpan={3}
-                    count={tasksList.length}
+                    count={
+                      filteredTasksByRoles(
+                        tasksList,
+                        currentUser.roles[0],
+                        showUncompletedTasks,
+                        showCompletedTasks
+                      ).length
+                    }
                     rowsPerPage={rowsPerPage}
                     page={page}
                     SelectProps={{

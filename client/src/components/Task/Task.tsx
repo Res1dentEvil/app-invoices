@@ -1,17 +1,24 @@
+import './Task.scss';
+
+import CloudDoneOutlinedIcon from '@mui/icons-material/CloudDoneOutlined';
+import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
+import FindInPageIcon from '@mui/icons-material/FindInPage';
+import { TextField } from '@mui/material';
+import Button from '@mui/material/Button';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { changePaymentStatus, editTask, getTask } from '../../store/reducers/ActionCreators';
-import FindInPageIcon from '@mui/icons-material/FindInPage';
+
 import Preloader from '../../assets/Preloader';
-import './Task.scss';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { dateDifference, formatingDate } from '../../services/formatingDate';
-import { InputLabel, TextField } from '@mui/material';
-import Button from '@mui/material/Button';
-import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
-import { storeSlice } from '../../store/reducers/StoreSlice';
-import CloudDoneOutlinedIcon from '@mui/icons-material/CloudDoneOutlined';
 import { ITask, PaymentStatus } from '../../services/types';
+import {
+  changeDestination,
+  changePaymentStatus,
+  editTask,
+  getTask,
+} from '../../store/reducers/ActionCreators';
+import { storeSlice } from '../../store/reducers/StoreSlice';
 import { SelectMUI } from '../UI/Select/Select';
 
 export const Task = () => {
@@ -97,7 +104,9 @@ export const Task = () => {
               {dateDifference(Date.now(), Date.parse(currentTask.dateUpdate))}
             </div>
             <div className="task__item">
-              {currentTask.whoCheckedList.length ? currentTask.whoCheckedList : '-'}
+              {currentTask.whoCheckedList.length
+                ? [...new Set(currentTask.whoCheckedList)].join(', ')
+                : '-'}
             </div>
             <div className="task__item task__assigned">
               {!editMode ? (
@@ -159,7 +168,14 @@ export const Task = () => {
               variant="contained"
               disabled={disabledBtn}
               onClick={() => {
-                dispatch(editTask(id!, description!, assigned!));
+                dispatch(
+                  changeDestination(
+                    id!,
+                    assigned!,
+                    currentUser.roles[0],
+                    currentTask.whoCheckedList
+                  )
+                );
               }}
             >
               Надіслати

@@ -1,6 +1,6 @@
-import React from 'react';
 import { FormControl, InputLabel, MenuItem } from '@mui/material';
 import Select, { SelectProps } from '@mui/material/Select';
+import React from 'react';
 
 interface ISelectProps {
   assigned: string;

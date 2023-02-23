@@ -1,13 +1,15 @@
-import React, { useEffect } from 'react';
 import './Authorization.scss';
-import { Input } from '../UI/Input/Input';
-import { login, registration } from '../../store/reducers/ActionCreators';
-import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { Formik } from 'formik';
+
 import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
 import LoginIcon from '@mui/icons-material/Login';
-import { Link } from 'react-router-dom';
 import { TextField } from '@mui/material';
+import { Formik } from 'formik';
+import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom';
+
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { login, registration } from '../../store/reducers/ActionCreators';
+import { Input } from '../UI/Input/Input';
 
 interface IFormikErrors {
   email: string;
