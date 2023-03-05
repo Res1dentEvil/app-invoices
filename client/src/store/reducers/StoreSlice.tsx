@@ -7,10 +7,10 @@ const initialState: IState = {
   isAuth: !!localStorage.getItem('token'),
   isLoading: false,
   currentUser: {} as IUser,
-  tasksList: [] as ITask[],
+  taskList: [] as ITask[],
+  taskListBySection: [] as ITask[],
   currentTask: {} as ITask,
   error: '',
-  showSuccessAlert: false,
 };
 
 export const storeSlice = createSlice({
@@ -48,7 +48,11 @@ export const storeSlice = createSlice({
       console.log('logout...');
     },
     setTasksList(state, action: PayloadAction<ITask[]>) {
-      state.tasksList = action.payload;
+      state.taskList = action.payload;
+      state.taskListBySection = action.payload;
+    },
+    setTasksListBySection(state, action: PayloadAction<ITask[]>) {
+      state.taskListBySection = action.payload;
     },
     setCurrentTask(state, action: PayloadAction<ITask>) {
       state.currentTask = action.payload;

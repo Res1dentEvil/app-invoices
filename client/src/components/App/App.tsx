@@ -11,7 +11,8 @@ import { Registration } from '../Authorization/Registration';
 import CreateTask from '../CreateTask/CreateTask';
 import { Header } from '../Header/Header';
 import { Task } from '../Task/Task';
-import { TaskList } from '../TaskList/TaskList';
+import { AllTaskList } from '../TaskList/AllTaskList';
+import { TasksListByRole } from '../TaskList/TasksListByRole';
 
 export const App = () => {
   const dispatch = useAppDispatch();
@@ -23,7 +24,7 @@ export const App = () => {
 
   return (
     <>
-      <Header />
+      {isAuth && <Header />}
       <main className="main__wrapper">
         {!isAuth ? (
           <Routes>
@@ -33,7 +34,8 @@ export const App = () => {
           </Routes>
         ) : (
           <Routes>
-            <Route path="/" element={<TaskList />} />
+            <Route path="/" element={<TasksListByRole />} />
+            <Route path="/all" element={<AllTaskList />} />
             <Route path="/create" element={<CreateTask />} />
             <Route path="/task/:id" element={<Task />} />
             {/*<Route path="*" element={<NotFound />} />*/}

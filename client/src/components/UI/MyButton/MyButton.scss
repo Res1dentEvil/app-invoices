@@ -1,0 +1,26 @@
+.button {
+  width: 120px;
+  height: 35px;
+  background-color: transparent;
+  border: 1px solid #004d40;
+  color: #004d40;
+  border-radius: 5px;
+  text-transform: uppercase;
+
+  &:hover {
+    cursor: pointer;
+    //background-color: #0F5958;
+    //color: #F7F4EE;
+    box-shadow: rgba(0, 77, 64, 0.47) 0px 5px 15px;
+  }
+
+  &:active {
+    transform: translateY(2px);
+  }
+
+}
+
+.chosen-btn {
+  background-color: #0F5958;
+  color: #F7F4EE;
+}

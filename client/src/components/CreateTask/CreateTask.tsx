@@ -1,8 +1,15 @@
 import './CreateTask.scss';
 
-import { Alert, Button, FormControl, InputLabel, MenuItem, TextField } from '@mui/material';
+import {
+  Alert,
+  Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Snackbar,
+  TextField,
+} from '@mui/material';
 import Select from '@mui/material/Select';
-import Stack from '@mui/material/Stack';
 import React, { useState } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
@@ -12,7 +19,7 @@ import { createTask } from '../../store/reducers/ActionCreators';
 
 const CreateTask = () => {
   const dispatch = useAppDispatch();
-  const { currentUser, showSuccessAlert } = useAppSelector((state) => state.storeReducer);
+  const { currentUser } = useAppSelector((state) => state.storeReducer);
 
   const [description, setDescription] = useState('');
   const [section, setSection] = useState('Тваринники');
@@ -21,6 +28,7 @@ const CreateTask = () => {
   const [dateEnd, setDateEnd] = useState(formatDate());
   const [file, setFile] = useState<FileList | null>();
   const [errors, setErrors] = useState('');
+  const [isShowAlert, setIsShowAlert] = useState<boolean>(false);
 
   const handleSubmit = async (e: React.MouseEvent) => {
     e.preventDefault();
@@ -47,19 +55,40 @@ const CreateTask = () => {
       whoCheckedList: [],
       completed: PaymentStatus.WAITING,
     };
-    await dispatch(createTask(task));
+    await dispatch(createTask(task, setIsShowAlert));
     setDescription('');
     setFile(null);
   };
 
+  const handleClose = () => {
+    setIsShowAlert(false);
+  };
+
   return (
     <div className="create-container">
-      {showSuccessAlert && <Alert onClose={() => {}}>Завдання успішно створене!</Alert>}
+      <Snackbar open={isShowAlert} autoHideDuration={4000} onClose={handleClose}>
+        <Alert
+          onClose={handleClose}
+          severity="success"
+          sx={{
+            width: '100%',
+            backgroundColor: '#2E7D32',
+          }}
+        >
+          Завдання успішно створене!
+        </Alert>
+      </Snackbar>
+
       <form className="form__authorization">
         <h2>Створити завдання</h2>
 
         <div className="input__container">
-          <TextField label="Тема" onChange={(e) => setDescription(e.target.value)} size="small" />
+          <TextField
+            label="Тема"
+            onChange={(e) => setDescription(e.target.value)}
+            size="small"
+            value={description}
+          />
         </div>
 
         <div className="input__container">

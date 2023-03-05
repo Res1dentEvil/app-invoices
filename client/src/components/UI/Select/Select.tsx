@@ -5,7 +5,7 @@ import React from 'react';
 interface ISelectProps {
   assigned: string;
   setAssigned: (assigned: string) => void;
-  setDisabledBtn: (dis: boolean) => void;
+  setDisabledBtn?: (dis: boolean) => void;
 }
 
 export const SelectMUI = <C extends React.ElementType>(props: ISelectProps) => {
@@ -19,7 +19,7 @@ export const SelectMUI = <C extends React.ElementType>(props: ISelectProps) => {
         label="Призначено до"
         onChange={(e) => {
           props.setAssigned(e.target.value);
-          props.setDisabledBtn(false);
+          props.setDisabledBtn!(false);
         }}
       >
         <MenuItem value={'Центр контролю закупок'}>Центр контролю закупок</MenuItem>

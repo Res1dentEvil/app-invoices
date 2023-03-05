@@ -11,7 +11,7 @@ import { useParams } from 'react-router-dom';
 import Preloader from '../../assets/Preloader';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { dateDifference, formatingDate } from '../../services/formatingDate';
-import { ITask, PaymentStatus } from '../../services/types';
+import { ITask, ManagerPositions, PaymentStatus } from '../../services/types';
 import {
   changeDestination,
   changePaymentStatus,
@@ -51,7 +51,9 @@ export const Task = () => {
   }
   return (
     <div className="task">
-      <h2 className="task__header">Контроль оплати #{currentTask.counter}</h2>
+      <h2 className="task__header">
+        Контроль оплати #{currentTask.counter} <i>({currentTask.completed})</i>
+      </h2>
       <div className="task__body">
         <div className="task__item task__description">
           {!editMode ? (
@@ -182,31 +184,47 @@ export const Task = () => {
             </Button>
           </div>
         )}
+        {(currentUser.roles[0] === 'ADMIN' ||
+          currentUser.roles[0] === ManagerPositions.ChiefAccountant) && (
+          <div className="accountant-panel">
+            <h3>Зміна статусу оплати</h3>
+            <div className="accountant-panel__btn-group">
+              <Button
+                style={{ maxWidth: '140px' }}
+                variant="contained"
+                color="success"
+                disabled={currentTask.completed == PaymentStatus.PAID && true}
+                onClick={() => {
+                  dispatch(changePaymentStatus(id!, PaymentStatus.PAID));
+                }}
+              >
+                Сплатити
+              </Button>
+              <Button
+                style={{ maxWidth: '140px' }}
+                variant="contained"
+                color="error"
+                disabled={currentTask.completed == PaymentStatus.CANCELED && true}
+                onClick={() => {
+                  dispatch(changePaymentStatus(id!, PaymentStatus.CANCELED));
+                }}
+              >
+                Відхилити
+              </Button>
 
-        <div className="accountant-panel">
-          <Button
-            style={{ maxWidth: '140px' }}
-            variant="contained"
-            color="success"
-            disabled={currentTask.completed == PaymentStatus.PAID && true}
-            onClick={() => {
-              dispatch(changePaymentStatus(id!, PaymentStatus.PAID));
-            }}
-          >
-            Сплатити
-          </Button>
-          <Button
-            style={{ maxWidth: '140px' }}
-            variant="contained"
-            color="error"
-            disabled={currentTask.completed == PaymentStatus.CANCELED && true}
-            onClick={() => {
-              dispatch(changePaymentStatus(id!, PaymentStatus.CANCELED));
-            }}
-          >
-            Відхилити
-          </Button>
-        </div>
+              <Button
+                variant="contained"
+                color="primary"
+                disabled={currentTask.completed == PaymentStatus.WAITING && true}
+                onClick={() => {
+                  dispatch(changePaymentStatus(id!, PaymentStatus.WAITING));
+                }}
+              >
+                Повернути в очікування
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

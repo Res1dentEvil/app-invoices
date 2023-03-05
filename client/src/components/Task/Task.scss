@@ -102,7 +102,11 @@
 
 .accountant-panel {
   display: flex;
+  flex-direction: column;
+  gap: 20px;
+.accountant-panel__btn-group{
+  display: flex;
   flex-direction: row;
   gap: 30px;
-
+}
 }

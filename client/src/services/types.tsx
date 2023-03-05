@@ -2,10 +2,10 @@ export interface IState {
   isAuth: boolean;
   isLoading: boolean;
   currentUser: IUser;
-  tasksList: ITask[];
+  taskList: ITask[];
+  taskListBySection: ITask[];
   currentTask: ITask;
   error: string;
-  showSuccessAlert: boolean;
 }
 
 export interface IUser {

@@ -55,56 +55,57 @@ export const auth = () => async (dispatch: AppDispatch) => {
   }
 };
 
-export const createTask = (body: ITask) => async (dispatch: AppDispatch) => {
-  console.log('creating task...');
+export const createTask =
+  (body: ITask, setIsShowAlert: (arg0: boolean) => void) => async (dispatch: AppDispatch) => {
+    const formData = new FormData();
+    formData.append('owner', body.owner);
+    formData.append('description', body.description);
+    formData.append('assigned', body.assigned);
+    formData.append('articleImage', body.articleImage);
+    formData.append('section', body.section);
+    formData.append('dateStart', body.dateStart);
+    formData.append('dateEnd', body.dateEnd);
+    formData.append('dateUpdate', body.dateUpdate);
+    formData.append('priority', body.priority);
+    formData.append('whoCheckedList', JSON.stringify([]));
+    formData.append('completed', body.completed);
 
-  const formData = new FormData();
-  formData.append('owner', body.owner);
-  formData.append('description', body.description);
-  formData.append('assigned', body.assigned);
-  formData.append('articleImage', body.articleImage);
-  formData.append('section', body.section);
-  formData.append('dateStart', body.dateStart);
-  formData.append('dateEnd', body.dateEnd);
-  formData.append('dateUpdate', body.dateUpdate);
-  formData.append('priority', body.priority);
-  formData.append('whoCheckedList', JSON.stringify([]));
-  formData.append('completed', body.completed);
+    try {
+      dispatch(storeSlice.actions.fetching());
+      const response = await axios
+        .post(`${baseURL}/api/task/create`, formData, {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+        })
+        .then((response) => {
+          console.log(response);
+          if (response.statusText === 'OK') {
+            setIsShowAlert(true);
+          }
+        });
+    } catch (e) {
+      console.log('error');
+      const error = e as AxiosError;
+      dispatch(storeSlice.actions.authFetchingError(JSON.stringify(error.response?.data)));
+    }
+  };
 
-  try {
-    dispatch(storeSlice.actions.fetching());
-    const response = await axios
-      .post(`${baseURL}/api/task/create`, formData, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-      })
-      .then((response) => {
-        console.log(response);
-      });
-    // dispatch(storeSlice.actions.setShowSuccessAlert(true));
-    // setTimeout(() => {
-    //   dispatch(storeSlice.actions.setShowSuccessAlert(false));
-    // }, 4000);
-  } catch (e) {
-    console.log('error');
-    const error = e as AxiosError;
-    dispatch(storeSlice.actions.authFetchingError(JSON.stringify(error.response?.data)));
-  }
-};
-
-export const getAllTasks = () => async (dispatch: AppDispatch) => {
-  try {
-    dispatch(storeSlice.actions.fetching());
-    const response = await axios
-      .get(`${baseURL}/api/task`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-      })
-      .then((response) => {
-        // console.log(response.data);
-        dispatch(storeSlice.actions.setTasksList(response.data.reverse()));
-        dispatch(storeSlice.actions.fetchingSuccess());
-      });
-  } catch (e) {
-    const error = e as AxiosError;
+export const getAllTasks = (role: string) => async (dispatch: AppDispatch) => {
+  if (role === 'USER') {
+    dispatch(storeSlice.actions.setTasksList([] as ITask[]));
+  } else {
+    try {
+      dispatch(storeSlice.actions.fetching());
+      const response = await axios
+        .get(`${baseURL}/api/task`, {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+        })
+        .then((response) => {
+          dispatch(storeSlice.actions.setTasksList(response.data.reverse()));
+          dispatch(storeSlice.actions.fetchingSuccess());
+        });
+    } catch (e) {
+      const error = e as AxiosError;
+    }
   }
 };
 
