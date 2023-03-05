@@ -5,11 +5,13 @@
     align-items: center;
     justify-content: space-between;
   }
-  .btn-panel{
+
+  .btn-panel {
     display: flex;
     flex-direction: row;
     gap: 10px;
   }
+
   .col-counter {
     width: 35px;
     overflow: hidden;
