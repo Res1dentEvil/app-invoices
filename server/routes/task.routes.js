@@ -15,7 +15,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-router.post("/create", upload.single("articleImage"), async (req, res) => {
+router.post("/create", async (req, res) => {
   try {
     const currentTaskCounter = await TaskCounter.find({});
     const updateTaskCounter = await TaskCounter.findOneAndUpdate(
@@ -28,10 +28,10 @@ router.post("/create", upload.single("articleImage"), async (req, res) => {
 
     const task = new Task({
       counter: updateTaskCounter.value,
-      owner: req.body.owner,
+      owner: req.owner,
       description: req.body.description,
       assigned: req.body.assigned,
-      articleImage: `${req.body.description}_${req.file.originalname}`,
+      fileLink: req.body.fileLink,
       section: req.body.section,
       dateStart: Date.now(),
       dateEnd: req.body.dateEnd,

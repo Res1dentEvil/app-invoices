@@ -13,6 +13,7 @@ import { Header } from '../Header/Header';
 import { Task } from '../Task/Task';
 import { AllTaskList } from '../TaskList/AllTaskList';
 import { TasksListByRole } from '../TaskList/TasksListByRole';
+// import { Upload } from '../Upload';
 
 export const App = () => {
   const dispatch = useAppDispatch();
@@ -38,7 +39,7 @@ export const App = () => {
             <Route path="/all" element={<AllTaskList />} />
             <Route path="/create" element={<CreateTask />} />
             <Route path="/task/:id" element={<Task />} />
-            {/*<Route path="*" element={<NotFound />} />*/}
+            {/*<Route path="upload" element={<Upload />} />*/}
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         )}

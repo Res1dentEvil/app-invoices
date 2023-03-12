@@ -17,10 +17,10 @@ export const storeSlice = createSlice({
   name: 'myStore',
   initialState,
   reducers: {
-    fetching(state) {
+    fetchingStart(state) {
       state.isLoading = true;
     },
-    fetchingSuccess(state) {
+    fetchingEnd(state) {
       state.isLoading = false;
     },
     authFetchingSuccess(state, action: PayloadAction<IUser>) {
@@ -57,9 +57,6 @@ export const storeSlice = createSlice({
     setCurrentTask(state, action: PayloadAction<ITask>) {
       state.currentTask = action.payload;
     },
-    // setShowSuccessAlert(state, action: PayloadAction<boolean>) {
-    //   state.showSuccessAlert = action.payload;
-    // },
   },
 });
 

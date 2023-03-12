@@ -230,6 +230,7 @@ export const TasksListByRole = () => {
                       key={task._id}
                       onClick={() => {
                         router(`/task/${task._id}`);
+                        // console.log(task);
                       }}
                     >
                       <StyledTableCell component="th" scope="row">

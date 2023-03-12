@@ -1,5 +1,8 @@
 {
   "serverPort": 5000,
   "dbUrl": "mongodb+srv://ivan:ivanqwerty123@cluster0.8st36sd.mongodb.net/?retryWrites=true&w=majority",
-  "secretKey": "bla-bla-bla"
+  "secretKey": "bla-bla-bla",
+  "cloud_name": "dsg2tfmxt",
+  "api_key": "958827445655684",
+  "api_secret": "TSy-IjpsqEOt0vAwIlSG84tw-GI"
 }

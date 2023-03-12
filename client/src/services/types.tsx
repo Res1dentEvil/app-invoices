@@ -27,7 +27,7 @@ export interface ITask {
   owner: string;
   description: string;
   assigned: string;
-  articleImage: File;
+  fileLink: File;
   section: string;
   dateStart: string;
   dateUpdate: string;

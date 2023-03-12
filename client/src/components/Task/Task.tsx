@@ -153,7 +153,8 @@ export const Task = () => {
           className="search-icon-link"
           target="_blank"
           rel="noopener noreferrer"
-          href={`/uploads/${currentTask.articleImage}`}
+          // href={`/uploads/${currentTask.articleImage}`}
+          href={currentTask.fileLink.toString()}
         >
           <FindInPageIcon style={{ fill: 'grey' }} /> Переглянути рахунок
         </a>

@@ -9,7 +9,7 @@ const baseURL = `http://localhost:5000`;
 export const registration = (body: IAuthBody) => async (dispatch: AppDispatch) => {
   console.log('registration...');
   try {
-    dispatch(storeSlice.actions.fetching());
+    dispatch(storeSlice.actions.fetchingStart());
     const response = await axios
       .post(`${baseURL}/api/auth/registration`, body, {
         headers: { 'Content-Type': 'application/json' },
@@ -27,7 +27,7 @@ export const registration = (body: IAuthBody) => async (dispatch: AppDispatch) =
 export const login = (body: IAuthBody) => async (dispatch: AppDispatch) => {
   console.log('logining...');
   try {
-    dispatch(storeSlice.actions.fetching());
+    dispatch(storeSlice.actions.fetchingStart());
     const response = await axios.post(`${baseURL}/api/auth/login`, body, {
       headers: { 'Content-Type': 'application/json' },
     });
@@ -55,29 +55,40 @@ export const auth = () => async (dispatch: AppDispatch) => {
   }
 };
 
-export const createTask =
+export const uploadFile =
   (body: ITask, setIsShowAlert: (arg0: boolean) => void) => async (dispatch: AppDispatch) => {
-    const formData = new FormData();
-    formData.append('owner', body.owner);
-    formData.append('description', body.description);
-    formData.append('assigned', body.assigned);
-    formData.append('articleImage', body.articleImage);
-    formData.append('section', body.section);
-    formData.append('dateStart', body.dateStart);
-    formData.append('dateEnd', body.dateEnd);
-    formData.append('dateUpdate', body.dateUpdate);
-    formData.append('priority', body.priority);
-    formData.append('whoCheckedList', JSON.stringify([]));
-    formData.append('completed', body.completed);
+    const data = new FormData();
+    data.append('uploadFile', body.fileLink);
 
     try {
-      dispatch(storeSlice.actions.fetching());
       const response = await axios
-        .post(`${baseURL}/api/task/create`, formData, {
+        .post(`${baseURL}/api/upload/`, data, {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         })
         .then((response) => {
-          console.log(response);
+          if (response.statusText === 'OK') {
+            dispatch(createTask(body, response.data.uploadFile, setIsShowAlert));
+          }
+        });
+    } catch (e) {
+      console.log('uploadFile error');
+    }
+  };
+
+export const createTask =
+  (body: ITask, fileLink: string, setIsShowAlert: (arg0: boolean) => void) =>
+  async (dispatch: AppDispatch) => {
+    try {
+      dispatch(storeSlice.actions.fetchingStart());
+      const response = await axios
+        .post(
+          `${baseURL}/api/task/create`,
+          { ...body, fileLink: fileLink },
+          {
+            headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+          }
+        )
+        .then((response) => {
           if (response.statusText === 'OK') {
             setIsShowAlert(true);
           }
@@ -94,14 +105,14 @@ export const getAllTasks = (role: string) => async (dispatch: AppDispatch) => {
     dispatch(storeSlice.actions.setTasksList([] as ITask[]));
   } else {
     try {
-      dispatch(storeSlice.actions.fetching());
+      dispatch(storeSlice.actions.fetchingStart());
       const response = await axios
         .get(`${baseURL}/api/task`, {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         })
         .then((response) => {
           dispatch(storeSlice.actions.setTasksList(response.data.reverse()));
-          dispatch(storeSlice.actions.fetchingSuccess());
+          dispatch(storeSlice.actions.fetchingEnd());
         });
     } catch (e) {
       const error = e as AxiosError;
@@ -111,7 +122,7 @@ export const getAllTasks = (role: string) => async (dispatch: AppDispatch) => {
 
 export const getTask = (id: string) => async (dispatch: AppDispatch) => {
   try {
-    dispatch(storeSlice.actions.fetching());
+    dispatch(storeSlice.actions.fetchingStart());
     const response = await axios.get(`${baseURL}/api/task/${id}`, {
       headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
     });

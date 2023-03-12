@@ -15,11 +15,12 @@ import React, { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { formatDate } from '../../services/formatingDate';
 import { ITask, PaymentStatus } from '../../services/types';
-import { createTask } from '../../store/reducers/ActionCreators';
+import { getAllTasks, uploadFile } from '../../store/reducers/ActionCreators';
+import { storeSlice } from '../../store/reducers/StoreSlice';
 
 const CreateTask = () => {
   const dispatch = useAppDispatch();
-  const { currentUser } = useAppSelector((state) => state.storeReducer);
+  const { currentUser, isLoading } = useAppSelector((state) => state.storeReducer);
 
   const [description, setDescription] = useState('');
   const [section, setSection] = useState('Тваринники');
@@ -32,12 +33,15 @@ const CreateTask = () => {
 
   const handleSubmit = async (e: React.MouseEvent) => {
     e.preventDefault();
+    dispatch(storeSlice.actions.fetchingStart());
 
     if (!description) {
       setErrors('description field cannot be empty');
+      dispatch(storeSlice.actions.fetchingEnd());
       return;
     } else if (!file) {
       setErrors('file field cannot be empty');
+      dispatch(storeSlice.actions.fetchingEnd());
       return;
     }
 
@@ -45,7 +49,7 @@ const CreateTask = () => {
       owner: currentUser.id,
       description: description,
       assigned: assigned,
-      articleImage: file![0],
+      fileLink: file![0],
       // articleImage: URL.createObjectURL(file![0]),
       section: section,
       dateStart: '',
@@ -55,9 +59,11 @@ const CreateTask = () => {
       whoCheckedList: [],
       completed: PaymentStatus.WAITING,
     };
-    await dispatch(createTask(task, setIsShowAlert));
+    await dispatch(uploadFile(task, setIsShowAlert));
     setDescription('');
     setFile(null);
+    dispatch(getAllTasks(currentUser.roles[0]));
+    dispatch(storeSlice.actions.fetchingEnd());
   };
 
   const handleClose = () => {
@@ -171,6 +177,7 @@ const CreateTask = () => {
           className="btn_registration"
           type={'submit'}
           onClick={handleSubmit}
+          disabled={isLoading}
         >
           Створити
         </Button>
