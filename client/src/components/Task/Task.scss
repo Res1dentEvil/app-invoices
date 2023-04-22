@@ -1,6 +1,19 @@
 .task__header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
   margin-bottom: 20px;
-  color: #535557;
+
+  h2 {
+    color: #535557;
+  }
+
+  .icon__delete {
+    &:hover {
+      cursor: pointer;
+    }
+  }
 }
 
 .task__description {
@@ -104,9 +117,10 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
-.accountant-panel__btn-group{
-  display: flex;
-  flex-direction: row;
-  gap: 30px;
-}
+
+  .accountant-panel__btn-group {
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+  }
 }

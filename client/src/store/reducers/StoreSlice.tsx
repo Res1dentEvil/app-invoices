@@ -45,7 +45,6 @@ export const storeSlice = createSlice({
       state.isAuth = false;
       state.currentUser = {} as IUser;
       localStorage.removeItem('token');
-      console.log('logout...');
     },
     setTasksList(state, action: PayloadAction<ITask[]>) {
       state.taskList = action.payload;

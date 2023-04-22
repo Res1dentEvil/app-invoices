@@ -13,6 +13,17 @@ const schema = new Schema({
   priority: { type: String, required: true },
   whoCheckedList: [{ type: String }],
   completed: String,
+  fileCloudinary: {
+    type: {
+      fieldname: String,
+      filename: String,
+      originalname: String,
+      encoding: String,
+      mimetype: String,
+      path: String,
+      size: String,
+    },
+  },
 });
 
 module.exports = model("Task", schema);

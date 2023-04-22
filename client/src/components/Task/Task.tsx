@@ -2,11 +2,13 @@ import './Task.scss';
 
 import CloudDoneOutlinedIcon from '@mui/icons-material/CloudDoneOutlined';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import FindInPageIcon from '@mui/icons-material/FindInPage';
 import { TextField } from '@mui/material';
 import Button from '@mui/material/Button';
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import Preloader from '../../assets/Preloader';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
@@ -15,15 +17,19 @@ import { ITask, ManagerPositions, PaymentStatus } from '../../services/types';
 import {
   changeDestination,
   changePaymentStatus,
+  deleteFile,
   editTask,
   getTask,
 } from '../../store/reducers/ActionCreators';
 import { storeSlice } from '../../store/reducers/StoreSlice';
 import { SelectMUI } from '../UI/Select/Select';
+import { AlertMUI } from '../UI/Alert/AlertMUI';
 
 export const Task = () => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
+  const route = useNavigate();
+
   const { currentTask, currentUser } = useAppSelector((state) => state.storeReducer);
   const [assigned, setAssigned] = useState('Центр контролю закупок');
   const [editingAssigned, setEditingAssigned] = useState('Центр контролю закупок');
@@ -31,6 +37,7 @@ export const Task = () => {
   const [editMode, setEditMode] = useState(false);
   const [disabledBtn, setDisabledBtn] = useState(true);
   const [disabledBtnEdit, setDisabledBtnEdit] = useState(true);
+  const [error, setError] = useState<{ message: string } | null>();
 
   useEffect(() => {
     if (id) {
@@ -51,17 +58,31 @@ export const Task = () => {
   }
   return (
     <div className="task">
-      <h2 className="task__header">
-        Контроль оплати #{currentTask.counter} <i>({currentTask.completed})</i>
-      </h2>
+      {error?.message && <AlertMUI error={error} setError={setError} />}
+
+      <div className="task__header">
+        <h2>
+          Контроль оплати #{currentTask.counter} <i>({currentTask.completed})</i>
+        </h2>
+        {currentUser.roles.includes('ADMIN' || 'MODERATOR') && (
+          <DeleteIcon
+            className={'icon__delete'}
+            style={{ fontSize: 35, fill: '#535557' }}
+            onClick={async () => {
+              await dispatch(deleteFile(id!, currentTask.fileCloudinary.filename));
+              route('/');
+            }}
+          />
+        )}
+      </div>
       <div className="task__body">
         <div className="task__item task__description">
           {!editMode ? (
             <h3>
               {currentTask.description}
-              {currentUser.roles.includes('ADMIN') && (
+              {currentUser.roles.includes('ADMIN' || 'MODERATOR') && (
                 <span className="edit-icon" onClick={() => setEditMode(true)}>
-                  <DriveFileRenameOutlineIcon style={{ fill: 'cornflowerblue' }} />
+                  <EditIcon style={{ fill: 'cornflowerblue' }} />
                 </span>
               )}
             </h3>
@@ -80,7 +101,7 @@ export const Task = () => {
                 variant="contained"
                 disabled={disabledBtnEdit}
                 onClick={() => {
-                  dispatch(editTask(id!, description!, editingAssigned!));
+                  dispatch(editTask(id!, description!, editingAssigned!, setError));
                   setEditMode(false);
                 }}
               >
@@ -116,7 +137,7 @@ export const Task = () => {
                   {currentTask.assigned}
                   {currentUser.roles.includes('ADMIN') && (
                     <span className="edit-icon" onClick={() => setEditMode(true)}>
-                      <DriveFileRenameOutlineIcon style={{ fill: 'cornflowerblue' }} />
+                      <EditIcon style={{ fill: 'cornflowerblue' }} />
                     </span>
                   )}
                 </>
@@ -132,7 +153,7 @@ export const Task = () => {
                     variant="contained"
                     disabled={disabledBtnEdit}
                     onClick={() => {
-                      dispatch(editTask(id!, description!, editingAssigned!));
+                      dispatch(editTask(id!, description!, editingAssigned!, setError));
                       setEditMode(false);
                     }}
                   >
@@ -179,6 +200,7 @@ export const Task = () => {
                     currentTask.whoCheckedList
                   )
                 );
+                setDisabledBtn(true);
               }}
             >
               Надіслати

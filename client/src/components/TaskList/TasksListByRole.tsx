@@ -162,6 +162,7 @@ export const TasksListByRole = () => {
               sx={{
                 borderColor: '#004d40',
                 color: '#004d40',
+                fontWeight: '600',
               }}
             >
               Переглянути весь список завдань

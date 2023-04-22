@@ -1,13 +1,13 @@
 import axios, { AxiosError } from 'axios';
 
-import { IAuthBody, ITask } from '../../services/types';
+import { IAuthBody, IFileCloudinary, ITask } from '../../services/types';
 import { AppDispatch } from '../store';
 import { storeSlice } from './StoreSlice';
+import React from 'react';
 
 const baseURL = `http://localhost:5000`;
 
 export const registration = (body: IAuthBody) => async (dispatch: AppDispatch) => {
-  console.log('registration...');
   try {
     dispatch(storeSlice.actions.fetchingStart());
     const response = await axios
@@ -24,21 +24,22 @@ export const registration = (body: IAuthBody) => async (dispatch: AppDispatch) =
   }
 };
 
-export const login = (body: IAuthBody) => async (dispatch: AppDispatch) => {
-  console.log('logining...');
-  try {
-    dispatch(storeSlice.actions.fetchingStart());
-    const response = await axios.post(`${baseURL}/api/auth/login`, body, {
-      headers: { 'Content-Type': 'application/json' },
-    });
-    // console.log('response.data.user', response.data.user);
-    dispatch(storeSlice.actions.authFetchingSuccess(response.data.user));
-    localStorage.setItem('token', response.data.token);
-  } catch (e) {
-    const error = e as AxiosError;
-    dispatch(storeSlice.actions.authFetchingError(JSON.stringify(error.response?.data)));
-  }
-};
+export const login =
+  (body: IAuthBody, setError: (value: { message: string }) => void) =>
+  async (dispatch: AppDispatch) => {
+    try {
+      dispatch(storeSlice.actions.fetchingStart());
+      const response = await axios.post(`${baseURL}/api/auth/login`, body, {
+        headers: { 'Content-Type': 'application/json' },
+      });
+      dispatch(storeSlice.actions.authFetchingSuccess(response.data.user));
+      localStorage.setItem('token', response.data.token);
+    } catch (e) {
+      const error = e as AxiosError;
+      dispatch(storeSlice.actions.authFetchingError(JSON.stringify(error.response?.data)));
+      setError(error.response?.data as { message: string });
+    }
+  };
 
 export const auth = () => async (dispatch: AppDispatch) => {
   try {
@@ -48,7 +49,6 @@ export const auth = () => async (dispatch: AppDispatch) => {
     dispatch(storeSlice.actions.authFetchingSuccess(response.data.user));
     localStorage.setItem('token', response.data.token);
   } catch (e) {
-    console.log('auth error');
     dispatch(storeSlice.actions.logout());
     const error = e as AxiosError;
     localStorage.removeItem('token');
@@ -62,12 +62,14 @@ export const uploadFile =
 
     try {
       const response = await axios
-        .post(`${baseURL}/api/upload/`, data, {
+        .post(`${baseURL}/api/file/upload`, data, {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         })
         .then((response) => {
           if (response.statusText === 'OK') {
-            dispatch(createTask(body, response.data.uploadFile, setIsShowAlert));
+            dispatch(createTask(body, response.data, setIsShowAlert));
+          } else {
+            alert('Помилка завантаження файлу');
           }
         });
     } catch (e) {
@@ -75,15 +77,37 @@ export const uploadFile =
     }
   };
 
+export const deleteFile = (id: string, fileName: string) => async (dispatch: AppDispatch) => {
+  try {
+    const response = await axios
+      .post(
+        `${baseURL}/api/file/delete`,
+        { fileName },
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+        }
+      )
+      .then((response) => {
+        if (response.statusText === 'OK') {
+          dispatch(deleteTask(id));
+        } else {
+          alert('Помилка видалення файлу або завдання');
+        }
+      });
+  } catch (e) {
+    console.log('uploadFile error');
+  }
+};
+
 export const createTask =
-  (body: ITask, fileLink: string, setIsShowAlert: (arg0: boolean) => void) =>
+  (body: ITask, file: IFileCloudinary, setIsShowAlert: (arg0: boolean) => void) =>
   async (dispatch: AppDispatch) => {
     try {
       dispatch(storeSlice.actions.fetchingStart());
       const response = await axios
         .post(
           `${baseURL}/api/task/create`,
-          { ...body, fileLink: fileLink },
+          { ...body, fileLink: file.path, fileCloudinary: file },
           {
             headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
           }
@@ -99,6 +123,20 @@ export const createTask =
       dispatch(storeSlice.actions.authFetchingError(JSON.stringify(error.response?.data)));
     }
   };
+
+export const deleteTask = (id: string) => async (dispatch: AppDispatch) => {
+  try {
+    const response = await axios.delete(
+      `${baseURL}/api/task/delete/${id}`,
+
+      {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      }
+    );
+  } catch (e) {
+    const error = e as AxiosError;
+  }
+};
 
 export const getAllTasks = (role: string) => async (dispatch: AppDispatch) => {
   if (role === 'USER') {
@@ -133,7 +171,13 @@ export const getTask = (id: string) => async (dispatch: AppDispatch) => {
 };
 
 export const editTask =
-  (id: string, description: string, assigned: string) => async (dispatch: AppDispatch) => {
+  (
+    id: string,
+    description: string,
+    assigned: string,
+    setError: (value: { message: string }) => void
+  ) =>
+  async (dispatch: AppDispatch) => {
     try {
       const response = await axios.put(
         `${baseURL}/api/task/edit/${id}`,
@@ -150,6 +194,7 @@ export const editTask =
       dispatch(storeSlice.actions.setCurrentTask(response.data));
     } catch (e) {
       const error = e as AxiosError;
+      setError(error.response?.data as { message: string });
     }
   };
 
@@ -171,7 +216,6 @@ export const changeDestination =
         }
       );
       dispatch(storeSlice.actions.setCurrentTask(response.data));
-      console.log(response.data);
     } catch (e) {
       const error = e as AxiosError;
     }

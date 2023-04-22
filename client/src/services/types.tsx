@@ -21,6 +21,17 @@ export interface IAuthBody {
   email: string;
   password: string;
 }
+
+export interface IFileCloudinary {
+  fieldname: string;
+  filename: string;
+  originalname: string;
+  encoding: string;
+  mimetype: string;
+  path: string;
+  size: number;
+}
+
 export interface ITask {
   counter?: number;
   _id?: string;
@@ -35,6 +46,7 @@ export interface ITask {
   priority: string;
   whoCheckedList: string[];
   completed: string;
+  fileCloudinary: IFileCloudinary;
 }
 
 export enum ManagerPositions {

@@ -39,6 +39,7 @@ router.post("/create", async (req, res) => {
       priority: req.body.priority,
       whoCheckedList: [],
       completed: req.body.completed,
+      fileCloudinary: req.body.fileCloudinary,
     });
     await task.save();
     await res.json(task);
@@ -83,6 +84,16 @@ router.put("/edit/:id", async (req, res) => {
 
     await task.save();
     await res.json(await Task.findOne({ _id: id }));
+  } catch (error) {
+    return res.status(404).json({ message: "Uncorrect request" });
+  }
+});
+
+//delete task
+router.delete("/delete/:id", async (req, res) => {
+  try {
+    await Task.findOneAndDelete({ _id: req.params.id });
+    return res.json();
   } catch (error) {
     console.log(error);
   }

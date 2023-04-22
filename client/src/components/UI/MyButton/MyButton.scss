@@ -6,12 +6,11 @@
   color: #004d40;
   border-radius: 5px;
   text-transform: uppercase;
+  font-weight: 600;
 
   &:hover {
     cursor: pointer;
-    //background-color: #0F5958;
-    //color: #F7F4EE;
-    box-shadow: rgba(0, 77, 64, 0.47) 0px 5px 15px;
+    background-color: rgba(15, 89, 88, 0.11);
   }
 
   &:active {
@@ -23,4 +22,8 @@
 .chosen-btn {
   background-color: #0F5958;
   color: #F7F4EE;
+
+  &:hover {
+    background-color: #0F5958;
+  }
 }

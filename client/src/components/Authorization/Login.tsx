@@ -4,12 +4,13 @@ import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
 import LoginIcon from '@mui/icons-material/Login';
 import { TextField } from '@mui/material';
 import { Formik } from 'formik';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { login, registration } from '../../store/reducers/ActionCreators';
 import { Input } from '../UI/Input/Input';
+import { AlertMUI } from '../UI/Alert/AlertMUI';
 
 interface IFormikErrors {
   email: string;
@@ -19,9 +20,11 @@ interface IFormikErrors {
 export const Login = () => {
   const dispatch = useAppDispatch();
   const { isAuth } = useAppSelector((state) => state.storeReducer);
+  const [error, setError] = useState<{ message: string } | null>();
 
   return (
     <div className="auth-container">
+      {error?.message && <AlertMUI error={error} setError={setError} />}
       <Formik
         initialValues={{ email: '', password: '' }}
         validate={(values) => {
@@ -39,7 +42,7 @@ export const Login = () => {
           return errors;
         }}
         onSubmit={(values, { setSubmitting }) => {
-          dispatch(login(values));
+          dispatch(login(values, setError));
           setSubmitting(false);
         }}
       >

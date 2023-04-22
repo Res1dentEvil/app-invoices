@@ -14,7 +14,7 @@ import React, { useState } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { formatDate } from '../../services/formatingDate';
-import { ITask, PaymentStatus } from '../../services/types';
+import { IFileCloudinary, ITask, PaymentStatus } from '../../services/types';
 import { getAllTasks, uploadFile } from '../../store/reducers/ActionCreators';
 import { storeSlice } from '../../store/reducers/StoreSlice';
 
@@ -58,10 +58,13 @@ const CreateTask = () => {
       priority: priority,
       whoCheckedList: [],
       completed: PaymentStatus.WAITING,
+      fileCloudinary: {} as IFileCloudinary,
     };
     await dispatch(uploadFile(task, setIsShowAlert));
     setDescription('');
     setFile(null);
+    setErrors('');
+    (document.getElementById('form__authorization')! as HTMLFormElement).reset();
     dispatch(getAllTasks(currentUser.roles[0]));
     dispatch(storeSlice.actions.fetchingEnd());
   };
@@ -85,7 +88,7 @@ const CreateTask = () => {
         </Alert>
       </Snackbar>
 
-      <form className="form__authorization">
+      <form className="form__authorization" id="form__authorization">
         <h2>Створити завдання</h2>
 
         <div className="input__container">

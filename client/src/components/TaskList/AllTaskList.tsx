@@ -167,6 +167,7 @@ export const AllTaskList = () => {
               sx={{
                 borderColor: '#004d40',
                 color: '#004d40',
+                fontWeight: '600',
               }}
             >
               Переглянути список моїх завдань
