@@ -5,7 +5,8 @@ import { AppDispatch } from '../store';
 import { storeSlice } from './StoreSlice';
 import React from 'react';
 
-const baseURL = `http://localhost:5000`;
+// const baseURL = `http://localhost:5000`;
+const baseURL = `https://app-invoices-server-res1dentevil.onrender.com`;
 
 export const registration = (body: IAuthBody) => async (dispatch: AppDispatch) => {
   try {
@@ -66,7 +67,7 @@ export const uploadFile =
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         })
         .then((response) => {
-          if (response.statusText === 'OK') {
+          if (response.status === 200) {
             dispatch(createTask(body, response.data, setIsShowAlert));
           } else {
             alert('Помилка завантаження файлу');
@@ -88,7 +89,7 @@ export const deleteFile = (id: string, fileName: string) => async (dispatch: App
         }
       )
       .then((response) => {
-        if (response.statusText === 'OK') {
+        if (response.status === 200) {
           dispatch(deleteTask(id));
         } else {
           alert('Помилка видалення файлу або завдання');
@@ -113,7 +114,7 @@ export const createTask =
           }
         )
         .then((response) => {
-          if (response.statusText === 'OK') {
+          if (response.status === 200) {
             setIsShowAlert(true);
           }
         });

@@ -1,7 +1,6 @@
 import './Task.scss';
 
 import CloudDoneOutlinedIcon from '@mui/icons-material/CloudDoneOutlined';
-import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import FindInPageIcon from '@mui/icons-material/FindInPage';
@@ -10,7 +9,7 @@ import Button from '@mui/material/Button';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import Preloader from '../../assets/Preloader';
+import Preloader from '../../assets/Preloader/Preloader';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { dateDifference, formatingDate } from '../../services/formatingDate';
 import { ITask, ManagerPositions, PaymentStatus } from '../../services/types';
@@ -19,6 +18,7 @@ import {
   changePaymentStatus,
   deleteFile,
   editTask,
+  getAllTasks,
   getTask,
 } from '../../store/reducers/ActionCreators';
 import { storeSlice } from '../../store/reducers/StoreSlice';

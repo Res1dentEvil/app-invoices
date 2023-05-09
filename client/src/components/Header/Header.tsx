@@ -1,13 +1,12 @@
 import './Header.scss';
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 
 import Logo from '../../assets/img/logo.png';
-import Preloader from '../../assets/Preloader';
+import Preloader from '../../assets/Preloader/Preloader';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { ManagerPositions } from '../../services/types';
-import { getAllTasks } from '../../store/reducers/ActionCreators';
 import { storeSlice } from '../../store/reducers/StoreSlice';
 
 export const Header = () => {

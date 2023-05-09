@@ -7,7 +7,7 @@ const fileRouter = require("./routes/file.routes");
 
 const app = express();
 
-const PORT = config.get("serverPort");
+const PORT = process.env.PORT || config.get("serverPort");
 const corsMiddleware = require("./middleware/cors.middleware");
 
 app.use(corsMiddleware);

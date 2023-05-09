@@ -115,6 +115,7 @@ const CreateTask = () => {
               <MenuItem value={'Головний бухгалтер'}>Головний бухгалтер</MenuItem>
               <MenuItem value={'Директор по тваринництву'}>Директор по тваринництву</MenuItem>
               <MenuItem value={'Головний інженер'}>Головний інженер</MenuItem>
+              <MenuItem value={'Головний вет.лікар'}>Головний вет.лікар</MenuItem>
             </Select>
           </FormControl>
         </div>

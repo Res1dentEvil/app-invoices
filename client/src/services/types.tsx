@@ -55,6 +55,7 @@ export enum ManagerPositions {
   ChiefAccountant = 'Головний бухгалтер',
   DirectorAnimalHusbandry = 'Директор по тваринництву',
   ChiefEngineer = 'Головний інженер',
+  Veterinarian = 'Головний вет.лікар',
 }
 
 export enum PaymentStatus {

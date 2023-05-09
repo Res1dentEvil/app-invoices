@@ -12,7 +12,11 @@ export const MyButton = ({ value, sectionValue, setSectionValue }: IButtonProps)
     <button
       className={`button ${sectionValue == value && 'chosen-btn'}`}
       onClick={() => {
-        setSectionValue(value);
+        if (sectionValue !== value) {
+          setSectionValue(value);
+        } else {
+          setSectionValue('all');
+        }
       }}
     >
       {value}

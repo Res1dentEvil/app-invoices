@@ -1,15 +1,27 @@
+
 .table-container {
   .table__header {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+    @media screen and (max-width: 1275px) {
+      justify-content: space-around;
+      .task__header {
+        margin: 15px;
+      }
+    }
+  }
+
+  .FormControlLabel {
+    padding: 0 15px;
   }
 
   .btn-panel {
     display: flex;
     flex-direction: row;
     gap: 10px;
+    margin: 10px 0;
   }
 
   .col-counter {
@@ -19,6 +31,11 @@
 
     &:hover {
       cursor: pointer;
+    }
+
+    @media screen and (max-width: 1275px) {
+      font-size: 11px;
+      width: 27px;
     }
   }
 
@@ -30,6 +47,15 @@
     &:hover {
       cursor: pointer;
     }
+
+    @media screen and (max-width: 1500px) {
+      width: 290px;
+    }
+
+    @media screen and (max-width: 1275px) {
+      width: 80px;
+      font-size: 11px;
+    }
   }
 
   .col-assigned {
@@ -40,6 +66,15 @@
       cursor: pointer;
     }
 
+    @media screen and (max-width: 1500px) {
+      width: 120px;
+      font-size: 11px;
+    }
+
+    @media screen and (max-width: 1275px) {
+      width: 80px;
+      font-size: 11px;
+    }
   }
 
   .col-section {
@@ -50,6 +85,13 @@
       cursor: pointer;
     }
 
+    @media screen and (max-width: 1500px) {
+      width: 100px;
+    }
+    @media screen and (max-width: 1275px) {
+      width: 70px;
+      font-size: 11px;
+    }
   }
 
   .col-dateStart {
@@ -60,6 +102,10 @@
       cursor: pointer;
     }
 
+    @media screen and (max-width: 1275px) {
+      width: 65px;
+      font-size: 11px;
+    }
   }
 
   .col-priority {
@@ -70,6 +116,10 @@
       cursor: pointer;
     }
 
+    @media screen and (max-width: 1275px) {
+      width: 65px;
+      font-size: 11px;
+    }
   }
 
   .high-priority {
@@ -84,7 +134,17 @@
     justify-content: center;
     align-items: center;
     margin: 0 auto;
+    @media screen and (max-width: 1275px) {
+      width: 65px;
+      font-size: 11px;
+    }
   }
 
 }
 
+@media screen and (max-width: 800px) {
+  #cell-start-date,
+  #cell-start-date-th {
+    display: none;
+  }
+}

@@ -14,20 +14,18 @@ import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
-import TableFooter from '@mui/material/TableFooter';
 import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import Preloader from '../../assets/Preloader';
+import Preloader from '../../assets/Preloader/Preloader';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { ColorMaterialUI } from '../../services/ColorMaterialUI';
 import { filterTasksByRole } from '../../services/filterTasksByRole';
 import { formatingDate } from '../../services/formatingDate';
 import { getPaymentStatus } from '../../services/getPaymentStatus';
-import { ITask, ManagerPositions } from '../../services/types';
+import { ManagerPositions } from '../../services/types';
 import { getAllTasks } from '../../store/reducers/ActionCreators';
 
 interface TablePaginationActionsProps {
@@ -149,8 +147,9 @@ export const TasksListByRole = () => {
   return (
     <>
       {!taskList.length ? (
-        <h1 className="task__header">У Вас немає завдань...</h1>
+        <h1 className="task__header"></h1>
       ) : (
+        // <h1 className="task__header">У Вас немає завдань...</h1>
         <div className="table-container">
           <div className="table__header">
             <h1 className="task__header">Мої завдання</h1>
@@ -170,7 +169,7 @@ export const TasksListByRole = () => {
           </div>
           {(currentUser.roles[0] === 'ADMIN' ||
             currentUser.roles[0] === ManagerPositions.ChiefAccountant) && (
-            <div>
+            <div className="FormControlLabel">
               <FormControlLabel
                 control={
                   <Checkbox
@@ -197,7 +196,7 @@ export const TasksListByRole = () => {
               />
             </div>
           )}
-          <Paper sx={{ minWidth: 1000, overflow: 'hidden' }}>
+          <Paper sx={{ minWidth: 650, overflow: 'hidden' }}>
             <TableContainer sx={{ maxHeight: 650 }}>
               <Table stickyHeader aria-label="sticky table">
                 <TableHead>
@@ -206,7 +205,9 @@ export const TasksListByRole = () => {
                     <StyledTableCell>Тема</StyledTableCell>
                     <StyledTableCell align="center">Призначено до</StyledTableCell>
                     <StyledTableCell align="center">Відділ</StyledTableCell>
-                    <StyledTableCell align="center">Початок</StyledTableCell>
+                    <StyledTableCell align="center" id="cell-start-date-th">
+                      Початок
+                    </StyledTableCell>
                     <StyledTableCell align="center">Кінець</StyledTableCell>
                     <StyledTableCell align="center">Пріоритет</StyledTableCell>
                     <StyledTableCell align="center">Статус оплати</StyledTableCell>
@@ -246,7 +247,7 @@ export const TasksListByRole = () => {
                       <StyledTableCell align="center">
                         <div className="col-section">{task.section}</div>
                       </StyledTableCell>
-                      <StyledTableCell align="center">
+                      <StyledTableCell align="center" id="cell-start-date">
                         <div className="col-dateStart">{formatingDate(task.dateStart)}</div>
                       </StyledTableCell>
                       <StyledTableCell align="center">

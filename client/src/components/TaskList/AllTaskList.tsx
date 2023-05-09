@@ -21,7 +21,7 @@ import TableRow from '@mui/material/TableRow';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import Preloader from '../../assets/Preloader';
+import Preloader from '../../assets/Preloader/Preloader';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { ColorMaterialUI } from '../../services/ColorMaterialUI';
 import { filterTasksByRole } from '../../services/filterTasksByRole';
@@ -119,6 +119,7 @@ export const AllTaskList = () => {
   );
   const router = useNavigate();
 
+  const buttonValueList = ['Тваринники', 'Рослинники'];
   const [showUncompletedTasks, setShowUncompletedTasks] = useState<boolean>(true);
   const [showCompletedTasks, setShowCompletedTasks] = useState<boolean>(false);
   const [page, setPage] = React.useState(0);
@@ -154,7 +155,7 @@ export const AllTaskList = () => {
   return (
     <>
       {!taskList.length ? (
-        <h1 className="task__header">У Вас немає завдань...</h1>
+        <h1 className="task__header"></h1>
       ) : (
         <div className="table-container">
           <div className="table__header">
@@ -174,7 +175,7 @@ export const AllTaskList = () => {
             </Button>
           </div>
 
-          <div className="btn-panel">
+          <div className="FormControlLabel">
             <FormControlLabel
               control={
                 <Checkbox
@@ -199,18 +200,20 @@ export const AllTaskList = () => {
               }
               label="Відображати тільки завершені і відхилені завдання"
             />
-            <MyButton
-              value={'Тваринники'}
-              sectionValue={sectionValue}
-              setSectionValue={setSectionValue}
-            />
-            <MyButton
-              value={'Рослинники'}
-              sectionValue={sectionValue}
-              setSectionValue={setSectionValue}
-            />
+            <div className="btn-panel">
+              {buttonValueList.map((buttonValue) => {
+                return (
+                  <MyButton
+                    key={buttonValue}
+                    value={buttonValue}
+                    sectionValue={sectionValue}
+                    setSectionValue={setSectionValue}
+                  />
+                );
+              })}
+            </div>
           </div>
-          <Paper sx={{ minWidth: 1000, overflow: 'hidden' }}>
+          <Paper sx={{ minWidth: 650, overflow: 'hidden' }}>
             <TableContainer sx={{ maxHeight: 650 }}>
               <Table stickyHeader aria-label="sticky table">
                 <TableHead>
@@ -219,7 +222,9 @@ export const AllTaskList = () => {
                     <StyledTableCell>Тема</StyledTableCell>
                     <StyledTableCell align="center">Призначено до</StyledTableCell>
                     <StyledTableCell align="center">Відділ</StyledTableCell>
-                    <StyledTableCell align="center">Початок</StyledTableCell>
+                    <StyledTableCell align="center" id="cell-start-date-th">
+                      Початок
+                    </StyledTableCell>
                     <StyledTableCell align="center">Кінець</StyledTableCell>
                     <StyledTableCell align="center">Пріоритет</StyledTableCell>
                     <StyledTableCell align="center">Статус оплати</StyledTableCell>
@@ -253,7 +258,7 @@ export const AllTaskList = () => {
                       <StyledTableCell align="center">
                         <div className="col-section">{task.section}</div>
                       </StyledTableCell>
-                      <StyledTableCell align="center">
+                      <StyledTableCell align="center" id="cell-start-date">
                         <div className="col-dateStart">{formatingDate(task.dateStart)}</div>
                       </StyledTableCell>
                       <StyledTableCell align="center">
