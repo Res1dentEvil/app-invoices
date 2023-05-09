@@ -1,8 +1,10 @@
 .create-container {
+  position: relative;
   height: 85vh;
   display: flex;
   flex-direction: column;
 }
+
 .errors-message {
   font-size: 13px;
   font-weight: bold;

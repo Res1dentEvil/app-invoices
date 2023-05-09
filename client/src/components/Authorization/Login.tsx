@@ -11,6 +11,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { login, registration } from '../../store/reducers/ActionCreators';
 import { Input } from '../UI/Input/Input';
 import { AlertMUI } from '../UI/Alert/AlertMUI';
+import Preloader from '../../assets/Preloader/Preloader';
 
 interface IFormikErrors {
   email: string;
@@ -19,11 +20,16 @@ interface IFormikErrors {
 
 export const Login = () => {
   const dispatch = useAppDispatch();
-  const { isAuth } = useAppSelector((state) => state.storeReducer);
+  const { isAuth, isLoading } = useAppSelector((state) => state.storeReducer);
   const [error, setError] = useState<{ message: string } | null>();
 
   return (
     <div className="auth-container">
+      {isLoading && (
+        <div className="darkenedDisplay">
+          <Preloader />
+        </div>
+      )}
       {error?.message && <AlertMUI error={error} setError={setError} />}
       <Formik
         initialValues={{ email: '', password: '' }}

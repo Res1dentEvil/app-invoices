@@ -17,6 +17,8 @@ import { formatDate } from '../../services/formatingDate';
 import { IFileCloudinary, ITask, PaymentStatus } from '../../services/types';
 import { getAllTasks, uploadFile } from '../../store/reducers/ActionCreators';
 import { storeSlice } from '../../store/reducers/StoreSlice';
+import Preloader from '../../assets/Preloader/Preloader';
+import { AlertMUI } from '../UI/Alert/AlertMUI';
 
 const CreateTask = () => {
   const dispatch = useAppDispatch();
@@ -75,6 +77,12 @@ const CreateTask = () => {
 
   return (
     <div className="create-container">
+      {isLoading && (
+        <div className="darkenedDisplay">
+          <Preloader />
+        </div>
+      )}
+
       <Snackbar open={isShowAlert} autoHideDuration={4000} onClose={handleClose}>
         <Alert
           onClose={handleClose}

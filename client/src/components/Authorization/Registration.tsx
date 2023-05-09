@@ -10,6 +10,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { registration } from '../../store/reducers/ActionCreators';
 import { storeSlice } from '../../store/reducers/StoreSlice';
 import { Input } from '../UI/Input/Input';
+import Preloader from '../../assets/Preloader/Preloader';
 
 interface IFormikErrors {
   email: string;
@@ -18,7 +19,7 @@ interface IFormikErrors {
 
 export const Registration = () => {
   const dispatch = useAppDispatch();
-  const { error } = useAppSelector((state) => state.storeReducer);
+  const { error, isLoading } = useAppSelector((state) => state.storeReducer);
   useEffect(
     () => () => {
       // console.log('registration unmount');
@@ -29,6 +30,11 @@ export const Registration = () => {
 
   return (
     <div className="auth-container">
+      {isLoading && (
+        <div className="darkenedDisplay">
+          <Preloader />
+        </div>
+      )}
       <Formik
         initialValues={{ email: '', password: '' }}
         validate={(values) => {

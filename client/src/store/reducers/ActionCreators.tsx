@@ -75,6 +75,7 @@ export const uploadFile =
         });
     } catch (e) {
       console.log('uploadFile error');
+      alert('Помилка завантаження файлу');
     }
   };
 
