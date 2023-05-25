@@ -18,7 +18,6 @@ import { IFileCloudinary, ITask, PaymentStatus } from '../../services/types';
 import { getAllTasks, uploadFile } from '../../store/reducers/ActionCreators';
 import { storeSlice } from '../../store/reducers/StoreSlice';
 import Preloader from '../../assets/Preloader/Preloader';
-import { AlertMUI } from '../UI/Alert/AlertMUI';
 
 const CreateTask = () => {
   const dispatch = useAppDispatch();

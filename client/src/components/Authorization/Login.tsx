@@ -2,13 +2,12 @@ import './Authorization.scss';
 
 import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
 import LoginIcon from '@mui/icons-material/Login';
-import { TextField } from '@mui/material';
 import { Formik } from 'formik';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { login, registration } from '../../store/reducers/ActionCreators';
+import { login } from '../../store/reducers/ActionCreators';
 import { Input } from '../UI/Input/Input';
 import { AlertMUI } from '../UI/Alert/AlertMUI';
 import Preloader from '../../assets/Preloader/Preloader';
@@ -20,7 +19,7 @@ interface IFormikErrors {
 
 export const Login = () => {
   const dispatch = useAppDispatch();
-  const { isAuth, isLoading } = useAppSelector((state) => state.storeReducer);
+  const { isLoading } = useAppSelector((state) => state.storeReducer);
   const [error, setError] = useState<{ message: string } | null>();
 
   return (

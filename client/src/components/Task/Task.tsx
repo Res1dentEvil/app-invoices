@@ -18,7 +18,6 @@ import {
   changePaymentStatus,
   deleteFile,
   editTask,
-  getAllTasks,
   getTask,
 } from '../../store/reducers/ActionCreators';
 import { storeSlice } from '../../store/reducers/StoreSlice';

@@ -14,9 +14,7 @@ import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
-import TableFooter from '@mui/material/TableFooter';
 import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -24,15 +22,11 @@ import { useNavigate } from 'react-router-dom';
 import Preloader from '../../assets/Preloader/Preloader';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { ColorMaterialUI } from '../../services/ColorMaterialUI';
-import { filterTasksByRole } from '../../services/filterTasksByRole';
 import { formatingDate } from '../../services/formatingDate';
 import { getPaymentStatus } from '../../services/getPaymentStatus';
 import { getAllTasks } from '../../store/reducers/ActionCreators';
 import { MyButton } from '../UI/MyButton/MyButton';
-import { ITask } from '../../services/types';
 import { filterTasksBySection } from '../../services/filterTasksBySection';
-import { store } from '../../index';
-import { storeSlice } from '../../store/reducers/StoreSlice';
 
 interface TablePaginationActionsProps {
   count: number;
