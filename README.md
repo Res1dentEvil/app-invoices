@@ -1,16 +1,19 @@
 # Invoices App :scroll:
 ![alt text for screen readers](./client/public/uploads/1.png "Main screen")
-### Description
+
+<img src="./client/public/uploads/1.png" width="350" title="hover text">
+
+### Description :memo:
 The project "Invoices App" was created to simplify the signing and processing of invoices by the company's internal team. The application automates the process of signing, transferring, and storing documents. Additionally, it provides convenient and fast access to information and contributes to increasing the efficiency and accuracy of invoice processing.
 
-### Technologies in the project
+### Technologies in the project :man_technologist:
  - React
  - TypeScript 
  - Redux Toolkit
  - Express
  - MongoDB
  
- ### Getting Started with Invoices App
+ ### Getting Started with Invoices App :runner:
  
  #### npm run dev
  Runs server side  
