@@ -24,7 +24,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { ColorMaterialUI } from '../../services/ColorMaterialUI';
 import { filterTasksByRole } from '../../services/filterTasksByRole';
 import { formatingDate } from '../../services/formatingDate';
-import { getPaymentStatus } from '../../services/getPaymentStatus';
+import { getPaymentStatusComponent } from '../../services/getPaymentStatusComponent';
 import { ManagerPositions } from '../../services/types';
 import { getAllTasks } from '../../store/reducers/ActionCreators';
 
@@ -263,7 +263,9 @@ export const TasksListByRole = () => {
                         </div>
                       </StyledTableCell>
                       <StyledTableCell align="center">
-                        <div className="col-completed">{getPaymentStatus(task.completed)}</div>
+                        <div className="col-completed">
+                          {getPaymentStatusComponent(task.completed)}
+                        </div>
                       </StyledTableCell>
                     </StyledTableRow>
                   ))}

@@ -4,7 +4,7 @@ import React from 'react';
 
 import { PaymentStatus } from './types';
 
-export function getPaymentStatus(status: string) {
+export function getPaymentStatusComponent(status: string) {
   switch (status) {
     case PaymentStatus.WAITING:
       return PaymentStatus.WAITING;

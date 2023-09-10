@@ -23,7 +23,7 @@ import Preloader from '../../assets/Preloader/Preloader';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { ColorMaterialUI } from '../../services/ColorMaterialUI';
 import { formatingDate } from '../../services/formatingDate';
-import { getPaymentStatus } from '../../services/getPaymentStatus';
+import { getPaymentStatusComponent } from '../../services/getPaymentStatusComponent';
 import { getAllTasks } from '../../store/reducers/ActionCreators';
 import { MyButton } from '../UI/MyButton/MyButton';
 import { filterTasksBySection } from '../../services/filterTasksBySection';
@@ -268,7 +268,9 @@ export const AllTaskList = () => {
                         </div>
                       </StyledTableCell>
                       <StyledTableCell align="center">
-                        <div className="col-completed">{getPaymentStatus(task.completed)}</div>
+                        <div className="col-completed">
+                          {getPaymentStatusComponent(task.completed)}
+                        </div>
                       </StyledTableCell>
                     </StyledTableRow>
                   ))}

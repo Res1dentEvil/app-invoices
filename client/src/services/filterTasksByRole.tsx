@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { ITask, PaymentStatus } from './types';
-import { storeSlice } from '../store/reducers/StoreSlice';
 
 export function filterTasksByRole(
   role: string,
@@ -25,9 +24,9 @@ export function filterTasksByRole(
   if (role === 'ADMIN') {
     return tasksList;
   } else {
-    const filteredTask = tasksList.filter((task: ITask) => {
+    const filteredTasks = tasksList.filter((task: ITask) => {
       return task.assigned === role;
     });
-    return filteredTask;
+    return filteredTasks;
   }
 }
